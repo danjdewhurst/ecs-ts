@@ -1,12 +1,17 @@
-import { EntityManager } from './EntityManager.ts';
-import { ComponentStorage, type Component } from './Component.ts';
+import {
+    EventBus,
+    type EventComponent,
+    type GameEvent,
+} from '../events/index.ts';
 import { ArchetypeManager } from './ArchetypeManager.ts';
+import { type Component, ComponentStorage } from './Component.ts';
+import { EntityManager } from './EntityManager.ts';
 import { Query } from './Query.ts';
 import type { System } from './System.ts';
-import { EventBus, EventComponent, type GameEvent } from '../events/index.ts';
 
 export class World {
     private entityManager = new EntityManager();
+    // biome-ignore lint/suspicious/noExplicitAny: ComponentStorage needs to handle heterogeneous component types
     private componentStorages = new Map<string, ComponentStorage<any>>();
     private archetypeManager = new ArchetypeManager();
     private systems: System[] = [];
@@ -18,13 +23,13 @@ export class World {
 
     destroyEntity(entityId: number): void {
         // Remove from all component storages
-        for (const [type, storage] of this.componentStorages) {
+        for (const [_type, storage] of this.componentStorages) {
             storage.remove(entityId);
         }
-        
+
         // Remove from archetype manager
         this.archetypeManager.removeEntity(entityId);
-        
+
         // Finally remove from entity manager
         this.entityManager.destroyEntity(entityId);
     }
@@ -52,7 +57,10 @@ export class World {
         return removed;
     }
 
-    getComponent<T extends Component>(entityId: number, componentType: string): T | undefined {
+    getComponent<T extends Component>(
+        entityId: number,
+        componentType: string
+    ): T | undefined {
         const storage = this.componentStorages.get(componentType);
         return storage?.get(entityId);
     }
@@ -64,7 +72,11 @@ export class World {
 
     query<T extends Component>(componentType: string): Query<T> {
         const storage = this.componentStorages.get(componentType);
-        return new Query(storage?.getEntities() ?? new Set(), this, componentType);
+        return new Query(
+            storage?.getEntities() ?? new Set(),
+            this,
+            componentType
+        );
     }
 
     queryMultiple(componentTypes: string[]): number[] {
@@ -72,7 +84,7 @@ export class World {
             return [];
         }
         if (componentTypes.length === 1) {
-            const storage = this.componentStorages.get(componentTypes[0]!);
+            const storage = this.componentStorages.get(componentTypes[0] ?? '');
             return storage ? Array.from(storage.getEntities()) : [];
         }
         return this.archetypeManager.queryEntities(componentTypes);
@@ -84,7 +96,9 @@ export class World {
     }
 
     removeSystem(systemName: string): boolean {
-        const index = this.systems.findIndex(system => system.name === systemName);
+        const index = this.systems.findIndex(
+            (system) => system.name === systemName
+        );
         if (index !== -1) {
             this.systems.splice(index, 1);
             return true;
@@ -95,15 +109,15 @@ export class World {
     update(deltaTime: number): void {
         // First flush any queued events from EventComponents
         this.flushComponentEvents();
-        
+
         // Process queued events before systems update
         this.eventBus.processEvents();
-        
+
         // Run systems
         for (const system of this.systems) {
             system.update(this, deltaTime);
         }
-        
+
         // Process any events generated during system updates
         this.eventBus.processEvents();
     }
@@ -125,7 +139,10 @@ export class World {
         this.eventBus.emit(event);
     }
 
-    subscribeToEvent(eventType: string, listener: (event: GameEvent) => void): () => void {
+    subscribeToEvent(
+        eventType: string,
+        listener: (event: GameEvent) => void
+    ): () => void {
         return this.eventBus.subscribe(eventType, listener);
     }
 
@@ -134,7 +151,9 @@ export class World {
     }
 
     private flushComponentEvents(): void {
-        const eventStorage = this.componentStorages.get('event') as ComponentStorage<EventComponent> | undefined;
+        const eventStorage = this.componentStorages.get('event') as
+            | ComponentStorage<EventComponent>
+            | undefined;
         if (!eventStorage) {
             return;
         }
@@ -146,14 +165,16 @@ export class World {
                 for (const event of events) {
                     this.eventBus.emit({
                         ...event,
-                        source: `entity:${entityId}`
+                        source: `entity:${entityId}`,
                     });
                 }
             }
         }
     }
 
-    private getOrCreateStorage<T extends Component>(componentType: string): ComponentStorage<T> {
+    private getOrCreateStorage<T extends Component>(
+        componentType: string
+    ): ComponentStorage<T> {
         let storage = this.componentStorages.get(componentType);
         if (!storage) {
             storage = new ComponentStorage<T>();

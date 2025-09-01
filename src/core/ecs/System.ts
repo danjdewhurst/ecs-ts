@@ -1,5 +1,5 @@
-import type { World } from './World.ts';
 import type { Component } from './Component.ts';
+import type { World } from './World.ts';
 
 export interface System {
     readonly priority: number;
@@ -17,21 +17,24 @@ export abstract class BaseSystem implements System {
 
     abstract update(world: World, deltaTime: number): void;
 
-    initialize?(world: World): void {
+    initialize?(_world: World): void {
         // Override in subclasses if needed
     }
 
-    shutdown?(world: World): void {
+    shutdown?(_world: World): void {
         // Override in subclasses if needed
     }
 
-    protected queryEntities(world: World, ...componentTypes: string[]): number[] {
+    protected queryEntities(
+        world: World,
+        ...componentTypes: string[]
+    ): number[] {
         return world.queryMultiple(componentTypes);
     }
 
     protected queryWithComponents<T extends Component>(
-        world: World, 
-        componentType: string, 
+        world: World,
+        componentType: string,
         callback: (entityId: number, component: T) => void
     ): void {
         const query = world.query<T>(componentType);

@@ -22,7 +22,7 @@ export class ArchetypeManager {
         if (!this.archetypes.has(newArchetype)) {
             this.archetypes.set(newArchetype, new Set());
         }
-        this.archetypes.get(newArchetype)!.add(entityId);
+        this.archetypes.get(newArchetype)?.add(entityId);
     }
 
     queryEntities(requiredComponents: string[]): number[] {
@@ -31,11 +31,15 @@ export class ArchetypeManager {
         }
 
         const results: number[] = [];
-        const requiredSet = new Set(requiredComponents);
+        const _requiredSet = new Set(requiredComponents);
 
         for (const [archetype, entities] of this.archetypes) {
             const archetypeComponents = new Set(archetype.split('|'));
-            if (requiredComponents.every(comp => archetypeComponents.has(comp))) {
+            if (
+                requiredComponents.every((comp) =>
+                    archetypeComponents.has(comp)
+                )
+            ) {
                 results.push(...entities);
             }
         }
@@ -58,9 +62,11 @@ export class ArchetypeManager {
     }
 
     getArchetypeStats(): Array<{ archetype: string; entityCount: number }> {
-        return Array.from(this.archetypes.entries()).map(([archetype, entities]) => ({
-            archetype,
-            entityCount: entities.size
-        }));
+        return Array.from(this.archetypes.entries()).map(
+            ([archetype, entities]) => ({
+                archetype,
+                entityCount: entities.size,
+            })
+        );
     }
 }

@@ -7,11 +7,17 @@
     "dev": "bun --watch src/index.ts",
     "test": "bun test",
     "build": "bun build src/index.ts --outdir dist",
-    "lint": "bun lint",
+    "lint": "bunx biome lint .",
+    "lint:fix": "bunx biome lint --write .",
+    "format": "bunx biome format .",
+    "format:fix": "bunx biome format --write .",
+    "check": "bunx biome check .",
+    "check:fix": "bunx biome check --write .",
     "typecheck": "bunx tsc --noEmit",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.2",
     "@types/bun": "latest",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6"
@@ -21,7 +27,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "bun run typecheck"
+      "bunx biome check --write --files-ignore-unknown=true"
     ]
   }
 }

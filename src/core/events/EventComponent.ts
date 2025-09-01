@@ -9,7 +9,7 @@ export class EventComponent implements Component {
         this.pendingEvents.push({
             type,
             timestamp: Date.now(),
-            data
+            data,
         });
     }
 

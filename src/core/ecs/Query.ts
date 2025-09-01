@@ -1,4 +1,4 @@
-import type { Component, ComponentStorage } from './Component.ts';
+import type { Component } from './Component.ts';
 import type { World } from './World.ts';
 
 export class Query<T extends Component> {
@@ -19,7 +19,10 @@ export class Query<T extends Component> {
     getComponents(): Array<{ entityId: number; component: T }> {
         const results: Array<{ entityId: number; component: T }> = [];
         for (const entityId of this.entities) {
-            const component = this.world.getComponent<T>(entityId, this.componentType);
+            const component = this.world.getComponent<T>(
+                entityId,
+                this.componentType
+            );
             if (component) {
                 results.push({ entityId, component });
             }
@@ -29,7 +32,10 @@ export class Query<T extends Component> {
 
     forEach(callback: (entityId: number, component: T) => void): void {
         for (const entityId of this.entities) {
-            const component = this.world.getComponent<T>(entityId, this.componentType);
+            const component = this.world.getComponent<T>(
+                entityId,
+                this.componentType
+            );
             if (component) {
                 callback(entityId, component);
             }
@@ -39,7 +45,10 @@ export class Query<T extends Component> {
     filter(predicate: (entityId: number, component: T) => boolean): Query<T> {
         const filteredEntities = new Set<number>();
         for (const entityId of this.entities) {
-            const component = this.world.getComponent<T>(entityId, this.componentType);
+            const component = this.world.getComponent<T>(
+                entityId,
+                this.componentType
+            );
             if (component && predicate(entityId, component)) {
                 filteredEntities.add(entityId);
             }

@@ -1,4 +1,4 @@
-import { test, expect, describe } from "bun:test";
+import { describe, expect, test } from 'bun:test';
 import { EventBus } from './EventBus';
 import type { GameEvent } from './GameEvent';
 
@@ -6,7 +6,7 @@ describe('EventBus', () => {
     test('should emit and process events', () => {
         const eventBus = new EventBus();
         const receivedEvents: GameEvent[] = [];
-        
+
         eventBus.subscribe('test-event', (event) => {
             receivedEvents.push(event);
         });
@@ -14,7 +14,7 @@ describe('EventBus', () => {
         const testEvent: GameEvent = {
             type: 'test-event',
             timestamp: Date.now(),
-            data: { message: 'Hello World' }
+            data: { message: 'Hello World' },
         };
 
         eventBus.emit(testEvent);
@@ -30,11 +30,11 @@ describe('EventBus', () => {
         const eventBus = new EventBus();
         const listener1Events: GameEvent[] = [];
         const listener2Events: GameEvent[] = [];
-        
+
         eventBus.subscribe('multi-listener', (event) => {
             listener1Events.push(event);
         });
-        
+
         eventBus.subscribe('multi-listener', (event) => {
             listener2Events.push(event);
         });
@@ -42,7 +42,7 @@ describe('EventBus', () => {
         const testEvent: GameEvent = {
             type: 'multi-listener',
             timestamp: Date.now(),
-            data: { value: 42 }
+            data: { value: 42 },
         };
 
         eventBus.emit(testEvent);
@@ -57,7 +57,7 @@ describe('EventBus', () => {
     test('should allow unsubscribing from events', () => {
         const eventBus = new EventBus();
         const receivedEvents: GameEvent[] = [];
-        
+
         const unsubscribe = eventBus.subscribe('unsubscribe-test', (event) => {
             receivedEvents.push(event);
         });
@@ -65,7 +65,7 @@ describe('EventBus', () => {
         const testEvent: GameEvent = {
             type: 'unsubscribe-test',
             timestamp: Date.now(),
-            data: {}
+            data: {},
         };
 
         // First event should be received
@@ -86,8 +86,9 @@ describe('EventBus', () => {
         const eventBus = new EventBus();
         const consoleError = console.error;
         const errorMessages: string[] = [];
-        
+
         // Mock console.error to capture error messages
+        // biome-ignore lint/suspicious/noExplicitAny: Console.error accepts any arguments
         console.error = (...args: any[]) => {
             errorMessages.push(args.join(' '));
         };
@@ -104,7 +105,7 @@ describe('EventBus', () => {
         const testEvent: GameEvent = {
             type: 'error-test',
             timestamp: Date.now(),
-            data: { test: 'value' }
+            data: { test: 'value' },
         };
 
         eventBus.emit(testEvent);
@@ -115,14 +116,16 @@ describe('EventBus', () => {
 
         // Should have logged an error but continued processing
         expect(errorMessages).toHaveLength(1);
-        expect(errorMessages[0]).toContain('Event listener error for error-test');
+        expect(errorMessages[0]).toContain(
+            'Event listener error for error-test'
+        );
         expect(workingEvents).toHaveLength(1);
     });
 
     test('should queue multiple events and process in order', () => {
         const eventBus = new EventBus();
         const processedEvents: GameEvent[] = [];
-        
+
         eventBus.subscribe('ordered-test', (event) => {
             processedEvents.push(event);
         });
@@ -130,25 +133,27 @@ describe('EventBus', () => {
         const events: GameEvent[] = [
             { type: 'ordered-test', timestamp: 1, data: { order: 1 } },
             { type: 'ordered-test', timestamp: 2, data: { order: 2 } },
-            { type: 'ordered-test', timestamp: 3, data: { order: 3 } }
+            { type: 'ordered-test', timestamp: 3, data: { order: 3 } },
         ];
 
         // Emit all events
-        events.forEach(event => eventBus.emit(event));
+        for (const event of events) {
+            eventBus.emit(event);
+        }
         expect(eventBus.hasQueuedEvents()).toBe(true);
 
         // Process all at once
         eventBus.processEvents();
-        
+
         expect(processedEvents).toHaveLength(3);
-        expect(processedEvents[0]!.data.order).toBe(1);
-        expect(processedEvents[1]!.data.order).toBe(2);
-        expect(processedEvents[2]!.data.order).toBe(3);
+        expect(processedEvents[0]?.data.order).toBe(1);
+        expect(processedEvents[1]?.data.order).toBe(2);
+        expect(processedEvents[2]?.data.order).toBe(3);
     });
 
     test('should provide listener count', () => {
         const eventBus = new EventBus();
-        
+
         expect(eventBus.getListenerCount('test-count')).toBe(0);
 
         const unsubscribe1 = eventBus.subscribe('test-count', () => {});
@@ -166,10 +171,10 @@ describe('EventBus', () => {
 
     test('should clear event queue', () => {
         const eventBus = new EventBus();
-        
+
         eventBus.emit({ type: 'test', timestamp: Date.now(), data: {} });
         eventBus.emit({ type: 'test', timestamp: Date.now(), data: {} });
-        
+
         expect(eventBus.hasQueuedEvents()).toBe(true);
         eventBus.clearQueue();
         expect(eventBus.hasQueuedEvents()).toBe(false);

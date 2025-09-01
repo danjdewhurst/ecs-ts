@@ -8,7 +8,7 @@ export class SystemScheduler {
 
     addSystem(system: System): void {
         // Check for duplicate system names
-        if (this.systems.some(s => s.name === system.name)) {
+        if (this.systems.some((s) => s.name === system.name)) {
             throw new Error(`System with name '${system.name}' already exists`);
         }
 
@@ -17,7 +17,7 @@ export class SystemScheduler {
     }
 
     removeSystem(systemName: string): boolean {
-        const index = this.systems.findIndex(s => s.name === systemName);
+        const index = this.systems.findIndex((s) => s.name === systemName);
         if (index === -1) {
             return false;
         }
@@ -28,7 +28,7 @@ export class SystemScheduler {
     }
 
     getSystem(systemName: string): System | undefined {
-        return this.systems.find(s => s.name === systemName);
+        return this.systems.find((s) => s.name === systemName);
     }
 
     getSystems(): readonly System[] {
@@ -55,7 +55,10 @@ export class SystemScheduler {
             try {
                 system.initialize?.(world);
             } catch (error) {
-                console.error(`Error initializing system '${system.name}':`, error);
+                console.error(
+                    `Error initializing system '${system.name}':`,
+                    error
+                );
             }
         }
     }
@@ -67,7 +70,10 @@ export class SystemScheduler {
             try {
                 system.shutdown?.(world);
             } catch (error) {
-                console.error(`Error shutting down system '${system.name}':`, error);
+                console.error(
+                    `Error shutting down system '${system.name}':`,
+                    error
+                );
             }
         }
     }
@@ -79,7 +85,7 @@ export class SystemScheduler {
 
     private buildDependencyGraph(): void {
         this.dependencyGraph.clear();
-        
+
         // Initialize all systems in the graph
         for (const system of this.systems) {
             this.dependencyGraph.set(system.name, new Set());
@@ -90,10 +96,12 @@ export class SystemScheduler {
             if (system.dependencies) {
                 for (const dep of system.dependencies) {
                     // Verify dependency exists
-                    if (!this.systems.some(s => s.name === dep)) {
-                        throw new Error(`System '${system.name}' depends on '${dep}' which does not exist`);
+                    if (!this.systems.some((s) => s.name === dep)) {
+                        throw new Error(
+                            `System '${system.name}' depends on '${dep}' which does not exist`
+                        );
                     }
-                    this.dependencyGraph.get(system.name)!.add(dep);
+                    this.dependencyGraph.get(system.name)?.add(dep);
                 }
             }
         }
@@ -106,7 +114,9 @@ export class SystemScheduler {
 
         const visit = (systemName: string): void => {
             if (visiting.has(systemName)) {
-                throw new Error(`Circular dependency detected involving system '${systemName}'`);
+                throw new Error(
+                    `Circular dependency detected involving system '${systemName}'`
+                );
             }
             if (visited.has(systemName)) {
                 return;
@@ -114,15 +124,15 @@ export class SystemScheduler {
 
             visiting.add(systemName);
             const dependencies = this.dependencyGraph.get(systemName)!;
-            
+
             for (const dep of dependencies) {
                 visit(dep);
             }
 
             visiting.delete(systemName);
             visited.add(systemName);
-            
-            const system = this.systems.find(s => s.name === systemName)!;
+
+            const system = this.systems.find((s) => s.name === systemName)!;
             sorted.push(system);
         };
 
@@ -146,7 +156,7 @@ export class SystemScheduler {
             if (!levelGroups.has(level)) {
                 levelGroups.set(level, []);
             }
-            levelGroups.get(level)!.push(system);
+            levelGroups.get(level)?.push(system);
         }
 
         // Sort each level by priority
@@ -162,7 +172,7 @@ export class SystemScheduler {
 
     private computeDependencyLevels(): Map<string, number> {
         const levels = new Map<string, number>();
-        
+
         const computeLevel = (systemName: string): number => {
             if (levels.has(systemName)) {
                 return levels.get(systemName)!;
