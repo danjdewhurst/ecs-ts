@@ -20,7 +20,7 @@ We use GitHub to sync code, track issues, feature requests, and accept pull requ
 
 1. **Fork & Branch**: Create your feature branch from `main`
    ```bash
-   git checkout -b feature/my-amazing-feature
+   git checkout -b feat/my-amazing-feature
    ```
 
 2. **Develop**: Make your changes with comprehensive tests
@@ -57,10 +57,10 @@ describe('MyNewFeature', () => {
     test('should handle normal case correctly', () => {
         // Arrange
         const input = createTestInput();
-        
+
         // Act
         const result = myNewFeature(input);
-        
+
         // Assert
         expect(result).toEqual(expectedOutput);
     });

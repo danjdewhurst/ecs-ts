@@ -3,12 +3,14 @@ import { ComponentStorage, type Component } from './Component.ts';
 import { ArchetypeManager } from './ArchetypeManager.ts';
 import { Query } from './Query.ts';
 import type { System } from './System.ts';
+import { EventBus, EventComponent, type GameEvent } from '../events/index.ts';
 
 export class World {
     private entityManager = new EntityManager();
     private componentStorages = new Map<string, ComponentStorage<any>>();
     private archetypeManager = new ArchetypeManager();
     private systems: System[] = [];
+    private eventBus = new EventBus();
 
     createEntity(): number {
         return this.entityManager.createEntity();
@@ -91,9 +93,19 @@ export class World {
     }
 
     update(deltaTime: number): void {
+        // First flush any queued events from EventComponents
+        this.flushComponentEvents();
+        
+        // Process queued events before systems update
+        this.eventBus.processEvents();
+        
+        // Run systems
         for (const system of this.systems) {
             system.update(this, deltaTime);
         }
+        
+        // Process any events generated during system updates
+        this.eventBus.processEvents();
     }
 
     getEntityCount(): number {
@@ -106,6 +118,39 @@ export class World {
 
     getArchetypeStats(): Array<{ archetype: string; entityCount: number }> {
         return this.archetypeManager.getArchetypeStats();
+    }
+
+    // Event system methods
+    emitEvent(event: GameEvent): void {
+        this.eventBus.emit(event);
+    }
+
+    subscribeToEvent(eventType: string, listener: (event: GameEvent) => void): () => void {
+        return this.eventBus.subscribe(eventType, listener);
+    }
+
+    getEventBus(): EventBus {
+        return this.eventBus;
+    }
+
+    private flushComponentEvents(): void {
+        const eventStorage = this.componentStorages.get('event') as ComponentStorage<EventComponent> | undefined;
+        if (!eventStorage) {
+            return;
+        }
+
+        for (const entityId of eventStorage.getEntities()) {
+            const eventComponent = eventStorage.get(entityId);
+            if (eventComponent?.hasPendingEvents()) {
+                const events = eventComponent.flushEvents();
+                for (const event of events) {
+                    this.eventBus.emit({
+                        ...event,
+                        source: `entity:${entityId}`
+                    });
+                }
+            }
+        }
     }
 
     private getOrCreateStorage<T extends Component>(componentType: string): ComponentStorage<T> {

@@ -7,7 +7,10 @@ export { World } from './core/ecs/World.ts';
 export { BaseSystem, type System } from './core/ecs/System.ts';
 export { SystemScheduler } from './core/ecs/SystemScheduler.ts';
 
-// Re-export everything from core ECS module
+// Event System exports
+export { EventBus, EventComponent, type GameEvent } from './core/events/index.ts';
+
+// Re-export everything from core modules
 export * from './core/ecs/EntityManager.ts';
 export * from './core/ecs/Component.ts';
 export * from './core/ecs/ArchetypeManager.ts';
@@ -15,3 +18,4 @@ export * from './core/ecs/Query.ts';
 export * from './core/ecs/World.ts';
 export * from './core/ecs/System.ts';
 export * from './core/ecs/SystemScheduler.ts';
+export * from './core/events/index.ts';

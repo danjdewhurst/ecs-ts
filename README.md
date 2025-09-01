@@ -32,6 +32,7 @@
 🧩 **Flexible System Design**
 - Dependency-aware system scheduling
 - Priority-based execution ordering
+- Event-driven architecture with decoupled communication
 - Pluggable architecture for extensibility
 
 ## 🚀 Quick Start
@@ -44,14 +45,17 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/danjdewhurst/ecs-ts.git
+git clone git@github.com:danjdewhurst/ecs-ts.git
 cd ecs-ts
 
 # Install dependencies
 bun install
 
-# Run the example
+# Run the basic example
 bun examples/basic-example.ts
+
+# Run the event system example
+bun examples/event-system-example.ts
 ```
 
 ### Basic Usage
@@ -153,6 +157,28 @@ const healthQuery = world.query<HealthComponent>('health');
 const movingEntities = world.queryMultiple(['position', 'velocity']);
 ```
 
+#### 📡 **Event System**
+Decoupled communication between systems using events.
+
+```typescript
+// Subscribe to events
+world.subscribeToEvent('player-death', (event) => {
+    console.log(`Player ${event.data.playerId} died!`);
+});
+
+// Emit events from systems
+world.emitEvent({
+    type: 'player-death',
+    timestamp: Date.now(),
+    data: { playerId: entity }
+});
+
+// Components can queue events
+const eventComponent = new EventComponent();
+eventComponent.queueEvent('victory', { score: 1000 });
+world.addComponent(entity, eventComponent);
+```
+
 ### Advanced Features
 
 #### 📊 **Archetype System**
@@ -193,10 +219,11 @@ bun run build
 
 ### Test Coverage
 
-- ✅ **22 Unit Tests** - 100% core functionality coverage
+- ✅ **41 Unit Tests** - 100% core functionality coverage
 - ✅ **EntityManager** - 5 test cases covering ID recycling and lifecycle
 - ✅ **ComponentStorage** - 7 test cases covering storage operations
 - ✅ **World Integration** - 10 test cases covering full ECS workflows
+- ✅ **Event System** - 19 test cases covering event bus, components, and integration
 
 ## 📈 Performance
 
@@ -217,23 +244,33 @@ The engine is designed for high performance with several optimizations:
 - [x] Component Storage Architecture
 - [x] Archetype Management
 - [x] World Container
-- [x] System Architecture
+
+### ✅ Phase 2: System Architecture (Complete)
+- [x] System Base Classes
+- [x] System Scheduler
 - [x] Query System
+- [x] Dependency Resolution
 
-### 🔄 Phase 2: Event System (Next)
-- [ ] Event Bus Implementation
-- [ ] Event-Component Integration
-- [ ] System Event Handling
+### ✅ Phase 3: Event System (Complete)
+- [x] Event Bus Implementation
+- [x] Event-Component Integration
+- [x] System Event Handling
+- [x] Error Resilience
 
-### 🔄 Phase 3: WebSocket Integration
+### 🔄 Phase 4: WebSocket Integration (Next)
 - [ ] Bun WebSocket Server
 - [ ] Client Connection Management
 - [ ] Message Protocol
 
-### 🔄 Phase 4: Plugin Architecture
+### 🔄 Phase 5: Plugin Architecture
 - [ ] Plugin Manager
 - [ ] Core Plugin Interfaces
 - [ ] Example Plugins
+
+### 🔄 Phase 6: Performance Optimization
+- [ ] Dirty Component Tracking
+- [ ] Object Pooling
+- [ ] Memory Optimization
 
 See the full [Implementation Plan](PLAN.md) for detailed progress tracking.
 
@@ -245,7 +282,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/yourusername/ecs-ts.git
+git clone git@github.com:danjdewhurst/ecs-ts.git
 cd ecs-ts
 
 # Install dependencies
@@ -254,8 +291,9 @@ bun install
 # Run tests in watch mode
 bun test --watch
 
-# Run the example
+# Run the examples  
 bun examples/basic-example.ts
+bun examples/event-system-example.ts
 ```
 
 ### Pull Request Process

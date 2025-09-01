@@ -19,7 +19,8 @@ alwaysApply: true
 - `bun test` - Run all tests with coverage
 - `bun run typecheck` - TypeScript compilation check
 - `bun run dev` - Development mode with watch
-- `bun examples/basic-example.ts` - Run the example
+- `bun examples/basic-example.ts` - Run the basic example
+- `bun examples/event-system-example.ts` - Run the event system example
 
 ## Project Structure
 
@@ -32,7 +33,7 @@ src/
 │   ├── World.ts           # Central ECS coordinator
 │   ├── System.ts          # System interfaces
 │   └── SystemScheduler.ts # Dependency-aware scheduling
-├── core/events/        # Event system (Phase 3)
+├── core/events/        # Event system (Phase 3) ✅
 ├── core/websocket/     # WebSocket integration (Phase 4)
 ├── plugins/           # Plugin architecture (Phase 5)
 ├── systems/           # Game systems
@@ -208,7 +209,7 @@ feat(core)!: change Component interface to require readonly type
 Follow the [PLAN.md](PLAN.md) progression:
 - ✅ **Phase 1**: Core ECS Implementation (Complete)
 - ✅ **Phase 2**: System Architecture (Complete)  
-- 🔄 **Phase 3**: Event System Implementation
+- ✅ **Phase 3**: Event System Implementation (Complete)
 - 🔄 **Phase 4**: WebSocket Integration with Bun
 - 🔄 **Phase 5**: Plugin Architecture
 - 🔄 **Phase 6**: Performance Optimisation
