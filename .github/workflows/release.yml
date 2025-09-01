@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  BUN_VERSION: '1.2.17'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      packages: write
+    
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 🏗️ Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+          
+      - name: 📂 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-release-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: 🧪 Run tests
+        run: bun test
+        
+      - name: 🔍 TypeScript Check
+        run: bun run typecheck
+        
+      - name: 🏗️ Build project
+        run: bun run build
+        
+      - name: 📄 Generate changelog
+        id: changelog
+        run: |
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "## [${{ github.ref_name }}] - $(date +%Y-%m-%d)" >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "### Added" >> CHANGELOG.md
+            echo "- Initial release of ECS Game Engine" >> CHANGELOG.md
+          fi
+          
+          # Extract version section from changelog
+          VERSION="${{ github.ref_name }}"
+          awk "/^## \[${VERSION#v}\]/,/^## \[|^$/{if(!/^## \[${VERSION#v}\]/)print}" CHANGELOG.md > release_notes.md
+          
+          if [ ! -s release_notes.md ]; then
+            echo "### Features" > release_notes.md
+            echo "- ECS Game Engine with TypeScript and Bun" >> release_notes.md
+            echo "- High-performance entity-component system" >> release_notes.md
+            echo "- Archetype-based queries for optimal performance" >> release_notes.md
+            echo "- System scheduler with dependency resolution" >> release_notes.md
+            echo "- Comprehensive test suite" >> release_notes.md
+          fi
+          
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            dist/**/*
+            
+      # Future: NPM publishing when ready
+      # - name: 📦 Publish to NPM
+      #   run: bun publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

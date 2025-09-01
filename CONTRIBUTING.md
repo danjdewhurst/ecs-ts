@@ -1,0 +1,167 @@
+# Contributing to ECS Game Engine
+
+We love your input! We want to make contributing to the ECS Game Engine as easy and transparent as possible.
+
+## 🚀 Quick Start
+
+1. Fork the repo and create your branch from `main`
+2. Install dependencies: `bun install`
+3. Make your changes
+4. Add tests for your changes
+5. Ensure all tests pass: `bun test`
+6. Make sure TypeScript compiles: `bun run typecheck`
+7. Submit a pull request!
+
+## 📋 Development Process
+
+We use GitHub to sync code, track issues, feature requests, and accept pull requests.
+
+### Pull Request Process
+
+1. **Fork & Branch**: Create your feature branch from `main`
+   ```bash
+   git checkout -b feature/my-amazing-feature
+   ```
+
+2. **Develop**: Make your changes with comprehensive tests
+   - Write tests for new functionality
+   - Update existing tests if needed
+   - Follow the existing code style and patterns
+
+3. **Test**: Ensure all tests pass locally
+   ```bash
+   bun test
+   bun run typecheck
+   ```
+
+4. **Document**: Update documentation if needed
+   - Update README.md for user-facing changes
+   - Update inline comments for complex logic
+   - Update PLAN.md checkboxes if completing planned features
+
+5. **Submit**: Create a pull request with:
+   - Clear title and description
+   - Reference any related issues
+   - Screenshots/GIFs for UI changes (if applicable)
+
+## 🧪 Testing Guidelines
+
+- **Unit Tests**: All new code should have corresponding unit tests
+- **Integration Tests**: Add integration tests for complex features
+- **Test Coverage**: Aim to maintain or improve test coverage
+- **Test Naming**: Use descriptive test names that explain the behavior
+
+Example test structure:
+```typescript
+describe('MyNewFeature', () => {
+    test('should handle normal case correctly', () => {
+        // Arrange
+        const input = createTestInput();
+        
+        // Act
+        const result = myNewFeature(input);
+        
+        // Assert
+        expect(result).toEqual(expectedOutput);
+    });
+});
+```
+
+## 🎯 Code Style
+
+We use TypeScript with strict type checking. Please follow these guidelines:
+
+### General Principles
+- **Type Safety**: Use strict TypeScript settings
+- **Readability**: Code should be self-documenting
+- **Performance**: Consider performance implications
+- **Consistency**: Follow existing patterns and conventions
+
+### Specific Guidelines
+- Use `interface` for public APIs, `type` for internal types
+- Prefer `readonly` arrays and objects where appropriate
+- Use descriptive variable names
+- Add JSDoc comments for public APIs
+- Use proper error handling with meaningful messages
+
+### File Organization
+```
+src/
+├── core/           # Core engine functionality
+├── components/     # Reusable components
+├── systems/        # Game systems
+├── utils/          # Utility functions
+└── types/          # Type definitions
+```
+
+## 🐛 Bug Reports
+
+We use GitHub Issues to track bugs. Report a bug by [opening a new issue](https://github.com/danjdewhurst/ecs-ts/issues/new).
+
+**Great bug reports** include:
+- Quick summary of the issue
+- Steps to reproduce (be specific!)
+- Expected vs actual behavior
+- Code samples if applicable
+- Your environment (Bun version, OS, etc.)
+
+## 💡 Feature Requests
+
+We welcome feature requests! Please [open an issue](https://github.com/danjdewhurst/ecs-ts/issues/new) with:
+- Clear description of the feature
+- Use case and motivation
+- Proposed API (if you have ideas)
+- Willingness to implement (bonus points!)
+
+## 📦 Release Process
+
+We use semantic versioning (SemVer) and automated releases:
+
+- **Patch** (1.0.1): Bug fixes and minor improvements
+- **Minor** (1.1.0): New features that are backward compatible
+- **Major** (2.0.0): Breaking changes
+
+Releases are triggered by git tags and automated via GitHub Actions.
+
+## 🎯 Current Priorities
+
+Check our [Implementation Plan](PLAN.md) for current priorities:
+
+### High Priority
+- [ ] Event System Implementation
+- [ ] WebSocket Integration
+- [ ] Performance Benchmarks
+
+### Medium Priority
+- [ ] Plugin Architecture
+- [ ] Advanced Query System
+- [ ] Documentation Improvements
+
+### Help Wanted
+- Performance optimizations
+- Additional example games
+- Documentation improvements
+- Test coverage improvements
+
+## 📖 Resources
+
+- [Implementation Plan](PLAN.md) - Detailed roadmap and progress
+- [Examples](examples/) - Working code examples
+- [Tests](src/**/*.test.ts) - Test suite for reference
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/) - TypeScript reference
+- [Bun Documentation](https://bun.sh/docs) - Bun runtime reference
+
+## ❓ Questions?
+
+Feel free to:
+- [Open an issue](https://github.com/danjdewhurst/ecs-ts/issues/new) for questions
+- Start a [discussion](https://github.com/danjdewhurst/ecs-ts/discussions) for ideas
+- Reach out to [@danjdewhurst](https://github.com/danjdewhurst)
+
+## 📜 License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+---
+
+Thank you for contributing to the ECS Game Engine! 🎮✨

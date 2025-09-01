@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  BUN_VERSION: "1.2.17"
+
+jobs:
+  test:
+    name: Test & Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        bun-version: ["1.2.17", "latest"]
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Bun ${{ matrix.bun-version }}
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ matrix.bun-version }}
+
+      - name: 📂 Cache Bun dependencies
+        uses: actions/cache@v4
+        id: bun-cache
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-${{ matrix.bun-version }}-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-${{ matrix.bun-version }}-
+            ${{ runner.os }}-bun-
+
+      - name: 📥 Install dependencies
+        if: steps.bun-cache.outputs.cache-hit != 'true'
+        run: bun install --frozen-lockfile
+
+      - name: 🔍 TypeScript Check
+        run: bun run typecheck
+
+      - name: 🧪 Run tests
+        run: bun test --coverage
+
+      - name: 🏗️ Build project
+        run: bun run build
+
+      - name: 📊 Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: matrix.bun-version == 'latest'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: 📂 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-lint-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-lint-
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Note: These will be implemented when we add linting tools
+      # - name: 🔍 Run ESLint
+      #   run: bun run lint
+      #
+      # - name: 🎨 Check Prettier formatting
+      #   run: bun run format:check
+
+  performance:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: 📂 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-perf-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Note: This will run when we implement performance benchmarks
+      # - name: ⚡ Run performance benchmarks
+      #   run: bun run bench
+      #
+      # - name: 📊 Store benchmark results
+      #   uses: benchmark-action/github-action-benchmark@v1
+      #   with:
+      #     tool: 'customSmallerIsBetter'
+      #     output-file-path: benchmarks.json
