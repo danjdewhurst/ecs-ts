@@ -66,7 +66,7 @@ class PlayerInputSystem extends BaseSystem {
     readonly priority = 10;
     readonly name = 'PlayerInputSystem';
 
-    update(world: World): void {
+    update(_world: World): void {
         // Input handling is done via event listeners
         // This system could process queued input events
     }
