@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { World } from '../ecs/World';
 import { GameServer } from './GameServer';
-import { MessageSerializer } from './MessageSerializer';
+import * as MessageSerializer from './MessageSerializer';
+import type { NetworkMessage } from './NetworkMessage';
 
 describe('GameServer', () => {
     let world: World;
@@ -36,7 +37,9 @@ describe('GameServer', () => {
 
     test('should handle message serialization errors gracefully', () => {
         const clientId = 'test-client';
-        const invalidMessage = { invalid: 'message' } as any;
+        const invalidMessage = {
+            invalid: 'message',
+        } as unknown as NetworkMessage;
 
         const result = server.sendToClient(clientId, invalidMessage);
         expect(result).toBe(false);
@@ -84,7 +87,9 @@ describe('GameServer', () => {
         const server1 = new GameServer(world);
 
         // Access private method through reflection for testing
-        const generateId = (server1 as any).generateClientId;
+        const generateId = (
+            server1 as unknown as { generateClientId: () => string }
+        ).generateClientId;
 
         const id1 = generateId.call(server1);
         const id2 = generateId.call(server1);
@@ -93,7 +98,9 @@ describe('GameServer', () => {
         await new Promise((resolve) => setTimeout(resolve, 1));
 
         const server2 = new GameServer(world);
-        const generateId2 = (server2 as any).generateClientId;
+        const generateId2 = (
+            server2 as unknown as { generateClientId: () => string }
+        ).generateClientId;
         const id3 = generateId2.call(server2);
 
         expect(id1).not.toBe(id2);

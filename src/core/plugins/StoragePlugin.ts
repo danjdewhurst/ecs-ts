@@ -1,3 +1,4 @@
+import type { World } from '../ecs/World';
 import type { Plugin } from './Plugin.ts';
 
 /**
@@ -253,7 +254,7 @@ export abstract class BaseStoragePlugin implements StoragePlugin {
         };
     }
 
-    abstract initialize(world: any): Promise<void>;
+    abstract initialize(world: World): Promise<void>;
     shutdown?(): Promise<void> {
         // Default empty implementation
         return Promise.resolve();

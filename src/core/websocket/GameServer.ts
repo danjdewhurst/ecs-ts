@@ -2,7 +2,7 @@ import type { Server, ServerWebSocket } from 'bun';
 import type { World } from '../ecs/World';
 import type { EventBus } from '../events/EventBus';
 import type { GameClient } from './GameClient';
-import { MessageSerializer } from './MessageSerializer';
+import * as MessageSerializer from './MessageSerializer';
 import type { NetworkMessage } from './NetworkMessage';
 
 export interface GameServerConfig {

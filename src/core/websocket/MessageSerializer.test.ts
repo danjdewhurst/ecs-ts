@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { MessageSerializer } from './MessageSerializer';
+import * as MessageSerializer from './MessageSerializer';
 import type { NetworkMessage } from './NetworkMessage';
 
 describe('MessageSerializer', () => {
