@@ -94,13 +94,13 @@ Comprehensive reference for all public APIs with examples.
 - [x] **world.md**: World class, entity operations, component management
 - [x] **entity-manager.md**: Entity lifecycle, ID recycling, bulk operations
 - [x] **component.md**: Component interfaces, storage, best practices
-- [ ] **system.md**: System base class, lifecycle methods, patterns
-- [ ] **system-scheduler.md**: Dependencies, priorities, execution order
-- [ ] **archetype-manager.md**: Internal optimization, query performance
-- [ ] **query.md**: Component queries, filtering, iteration patterns
+- [x] **system.md**: System base class, lifecycle methods, patterns
+- [x] **system-scheduler.md**: Dependencies, priorities, execution order
+- [x] **archetype-manager.md**: Internal optimization, query performance
+- [x] **query.md**: Component queries, filtering, iteration patterns
 
 **api/events/**
-- [ ] **event-bus.md**: Event publishing, subscription, lifecycle
+- [x] **event-bus.md**: Event publishing, subscription, lifecycle
 - [ ] **event-component.md**: Event data structures, serialization
 - [ ] **event-system.md**: Event processing, handlers, middleware
 - [ ] **game-event.md**: Built-in events, custom event creation
