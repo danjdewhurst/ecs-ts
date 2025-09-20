@@ -76,6 +76,12 @@ bun examples/event-system-example.ts
 
 # Run the multiplayer WebSocket server example
 bun examples/websocket-example.ts
+
+# Run the plugin system example
+bun examples/plugin-system-example.ts
+
+# Run the performance optimization example
+bun examples/performance-optimization-example.ts
 ```
 
 ### Basic Usage

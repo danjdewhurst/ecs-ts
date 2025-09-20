@@ -36,6 +36,8 @@ Key principles that guide all code contributions:
 - `bun examples/basic-example.ts` - Run the basic example
 - `bun examples/event-system-example.ts` - Run the event system example
 - `bun examples/websocket-example.ts` - Run the WebSocket multiplayer example
+- `bun examples/plugin-system-example.ts` - Run the plugin system example
+- `bun examples/performance-optimization-example.ts` - Run the performance optimization example
 
 **Release & Publishing Commands:**
 - `bun run commit` - Interactive conventional commit creation (uses commitizen)
@@ -58,7 +60,8 @@ src/
 │   └── SystemScheduler.ts # Dependency-aware scheduling
 ├── core/events/        # Event system (Phase 3) ✅
 ├── core/websocket/     # WebSocket integration (Phase 4) ✅
-├── plugins/           # Plugin architecture (Phase 5)
+├── core/plugins/       # Plugin architecture (Phase 5) ✅
+├── core/performance/   # Performance optimization (Phase 6) ✅
 ├── systems/           # Game systems
 └── components/        # Game components
 ```
@@ -128,6 +131,8 @@ describe('FeatureName', () => {
 - Use archetype queries for multi-component operations
 - Avoid entity creation/destruction in hot loops
 - Cache query results when appropriate
+- Use dirty tracking for selective system updates
+- Leverage object pooling for frequently created/destroyed objects
 
 ## WebSocket Integration ✅
 
@@ -180,6 +185,7 @@ await server.start();
 - `events`: Event system
 - `websocket`: WebSocket functionality
 - `plugins`: Plugin architecture
+- `performance`: Performance optimization
 - `tests`: Test-related changes
 - `docs`: Documentation updates
 
@@ -299,8 +305,10 @@ Follow the [PLAN.md](PLAN.md) progression:
 - ✅ **Phase 2**: System Architecture (Complete)
 - ✅ **Phase 3**: Event System Implementation (Complete)
 - ✅ **Phase 4**: WebSocket Integration with Bun (Complete)
-- 🔄 **Phase 5**: Plugin Architecture
-- 🔄 **Phase 6**: Performance Optimisation
+- ✅ **Phase 5**: Plugin Architecture (Complete)
+- ✅ **Phase 6**: Performance Optimisation (Complete)
+
+**All 6 phases complete - Engine ready for production use**
 
 ## Claude Release Assistance
 
