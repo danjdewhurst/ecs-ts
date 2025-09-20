@@ -5,7 +5,7 @@
 **A high-performance Entity Component System (ECS) game engine built with TypeScript and Bun**
 
 [![CI](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml)
-[![Release](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release.yml)
+[![Release](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun](https://img.shields.io/badge/Bun-000000?style=flat&logo=bun&logoColor=white)](https://bun.sh/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

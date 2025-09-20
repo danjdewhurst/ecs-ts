@@ -242,7 +242,7 @@ To enable NPM publishing:
    - Configure proper NPM access permissions
 
 3. **Enable Publishing**
-   - Uncomment NPM publishing steps in `.github/workflows/release.yml`
+   - Uncomment NPM publishing steps in `.github/workflows/release-please.yml`
    - Test with a pre-release version first
 
 ### Publishing Strategy
