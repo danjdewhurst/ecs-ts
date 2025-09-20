@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.7](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.6...ecs-ts/v0.6.7) (2025-09-20)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** correct archive path in release workflow ([663c519](https://github.com/danjdewhurst/ecs-ts/commit/663c51959532c7a3df0429dd190be32af8a6bec1))
+
 ## [0.6.6](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.5...ecs-ts/v0.6.6) (2025-09-20)
 
 
