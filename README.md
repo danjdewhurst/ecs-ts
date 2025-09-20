@@ -41,6 +41,17 @@
 - Type-safe network protocol
 - Built-in authentication and session management
 
+## 📜 Philosophy
+
+This engine is built on a foundation of core principles that prioritize **purity, performance, and developer experience**. Our approach emphasizes:
+
+- **Data-driven design** with pure components and system-driven behavior
+- **Performance optimization** through cache-friendly memory layouts and archetype-based storage
+- **Developer ergonomics** with simple, focused APIs that avoid boilerplate
+- **Scalability and parallelism** designed for high-performance game development
+
+For the complete philosophy and design principles that guide this project, see [PHILOSOPHY.md](PHILOSOPHY.md).
+
 ## 🚀 Quick Start
 
 ### Prerequisites

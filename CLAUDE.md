@@ -6,6 +6,20 @@ alwaysApply: true
 
 # ECS Game Engine Development Guidelines
 
+## Core Philosophy
+
+**All development must adhere to the principles outlined in [PHILOSOPHY.md](PHILOSOPHY.md).**
+
+Key principles that guide all code contributions:
+- **Entities are IDs, Components are pure data** - No logic in components
+- **All game logic belongs in systems** - System-driven behavior is non-negotiable
+- **Optimize for cache locality and performance** - Data-driven design principles
+- **Single Responsibility Principle** - Each system, component, and entity has one purpose
+- **Developer ergonomics** - APIs must be simple, focused, and avoid boilerplate
+- **Robust tooling culture** - Debugging and profiling are first-class citizens
+
+**Before making any changes, review the complete philosophy document to ensure alignment with project principles.**
+
 ## Runtime & Tools
 
 **Use Bun for all operations:**
