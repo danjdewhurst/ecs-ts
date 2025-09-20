@@ -101,34 +101,34 @@ Comprehensive reference for all public APIs with examples.
 
 **api/events/**
 - [x] **event-bus.md**: Event publishing, subscription, lifecycle
-- [ ] **event-component.md**: Event data structures, serialization
-- [ ] **event-system.md**: Event processing, handlers, middleware
-- [ ] **game-event.md**: Built-in events, custom event creation
+- [x] **event-component.md**: Event data structures, serialization
+- [x] **event-system.md**: Event processing, handlers, middleware
+- [x] **game-event.md**: Built-in events, custom event creation
 
 ### Priority 3: Advanced Features
 Documentation for specialized functionality.
 
 **api/websocket/**
-- [ ] **game-server.md**: Server setup, client management, configuration
-- [ ] **game-client.md**: Client connection, state synchronization
-- [ ] **message-serializer.md**: Protocol handling, custom messages
-- [ ] **network-message.md**: Message types, validation, security
+- [x] **game-server.md**: Server setup, client management, configuration
+- [x] **game-client.md**: Client connection, state synchronization
+- [x] **message-serializer.md**: Protocol handling, custom messages
+- [x] **network-message.md**: Message types, validation, security
 
 **api/plugins/**
-- [ ] **plugin.md**: Plugin interface, lifecycle, metadata
-- [ ] **plugin-manager.md**: Loading, dependency resolution, error handling
-- [ ] **network-plugin.md**: Network abstractions, protocol extensions
-- [ ] **storage-plugin.md**: Persistence interfaces, data formats
+- [x] **plugin.md**: Plugin interface, lifecycle, metadata
+- [x] **plugin-manager.md**: Loading, dependency resolution, error handling
+- [x] **network-plugin.md**: Network abstractions, protocol extensions
+- [x] **storage-plugin.md**: Persistence interfaces, data formats
 
 **api/performance/**
-- [ ] **dirty-tracker.md**: Change tracking, selective updates
-- [ ] **object-pool.md**: Memory pooling, lifecycle management
+- [x] **dirty-tracker.md**: Change tracking, selective updates
+- [x] **object-pool.md**: Memory pooling, lifecycle management
 
 ### Priority 4: Practical Guides
 Task-oriented documentation for common development scenarios.
 
 **guides/**
-- [ ] **entities-and-components.md**: Design patterns, composition strategies
+- [x] **entities-and-components.md**: Design patterns, composition strategies
 - [ ] **systems-and-scheduling.md**: System architecture, dependencies
 - [ ] **events-and-communication.md**: Decoupled communication patterns
 - [ ] **performance-optimization.md**: Profiling, bottleneck identification
@@ -140,7 +140,7 @@ Task-oriented documentation for common development scenarios.
 Working code examples with detailed explanations.
 
 **examples/**
-- [ ] **basic-usage.md**: Annotated version of examples/basic-example.ts
+- [x] **basic-usage.md**: Annotated version of examples/basic-example.ts
 - [ ] **event-system-demo.md**: Event-driven architecture patterns
 - [ ] **websocket-multiplayer.md**: Real-time multiplayer implementation
 - [ ] **plugin-system-demo.md**: Plugin creation and integration
