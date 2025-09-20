@@ -35,6 +35,18 @@
 - Event-driven architecture with decoupled communication
 - Pluggable architecture for extensibility
 
+🔌 **Plugin Architecture**
+- Dynamic plugin loading with dependency resolution
+- Network and storage plugin interfaces
+- Error isolation and graceful failure handling
+- Plugin metadata and introspection capabilities
+
+⚡ **Performance Optimization**
+- Dirty component tracking for selective updates
+- Object pooling for memory efficiency
+- Performance statistics and monitoring
+- Cache-friendly data structures
+
 🌐 **Multiplayer Ready**
 - High-performance WebSocket server with Bun
 - Real-time client-server communication
@@ -235,6 +247,71 @@ await server.start();
 console.log('🎮 Multiplayer server running on ws://localhost:3000/ws');
 ```
 
+#### 🔌 **Plugin System**
+Extend the engine with custom functionality through plugins.
+
+```typescript
+import { PluginManager, Plugin, World } from '@danjdewhurst/ecs-ts/plugins';
+
+// Define a custom plugin
+class MyGamePlugin implements Plugin {
+    readonly name = 'MyGamePlugin';
+    readonly version = '1.0.0';
+    readonly dependencies: string[] = [];
+
+    async initialize(world: World): Promise<void> {
+        console.log('MyGamePlugin initialized!');
+        // Setup custom systems, components, etc.
+    }
+
+    async shutdown(): Promise<void> {
+        console.log('MyGamePlugin shutdown!');
+        // Cleanup resources
+    }
+}
+
+// Use the plugin system
+const pluginManager = new PluginManager();
+await pluginManager.loadPlugin(new MyGamePlugin());
+
+// Plugin dependencies are automatically resolved
+await pluginManager.initializeAll(world);
+```
+
+#### ⚡ **Performance Optimization**
+Optimize your game with built-in performance tools.
+
+```typescript
+import { DirtyTracker, ObjectPool } from '@danjdewhurst/ecs-ts/performance';
+
+// Track which entities need processing
+const dirtyTracker = new DirtyTracker();
+dirtyTracker.markDirty(entityId, 'position');
+
+// Only process dirty entities in systems
+class OptimizedMovementSystem extends BaseSystem {
+    update(world: World, deltaTime: number): void {
+        const dirtyEntities = world.dirtyTracker.getDirtyEntities('position');
+
+        for (const entityId of dirtyEntities) {
+            // Process only entities with position changes
+        }
+
+        world.dirtyTracker.clearDirty('position');
+    }
+}
+
+// Reuse objects to reduce garbage collection
+const bulletPool = new ObjectPool(
+    () => ({ x: 0, y: 0, active: false }), // Create function
+    (bullet) => { bullet.active = false; }  // Reset function
+);
+
+const bullet = bulletPool.acquire(); // Get from pool
+// ... use bullet
+bulletPool.release(bullet); // Return to pool
+```
+
 ### Advanced Features
 
 #### 📊 **Archetype System**
@@ -275,12 +352,14 @@ bun run build
 
 ### Test Coverage
 
-- ✅ **59 Unit Tests** - 100% core functionality coverage
+- ✅ **132 Unit Tests** - 100% core functionality coverage
 - ✅ **EntityManager** - 5 test cases covering ID recycling and lifecycle
 - ✅ **ComponentStorage** - 7 test cases covering storage operations
 - ✅ **World Integration** - 10 test cases covering full ECS workflows
 - ✅ **Event System** - 19 test cases covering event bus, components, and integration
 - ✅ **WebSocket System** - 18 test cases covering networking and multiplayer
+- ✅ **Plugin System** - 38 test cases covering plugin management and architecture
+- ✅ **Performance System** - 39 test cases covering dirty tracking and object pooling
 
 ## 📈 Performance
 
@@ -320,15 +399,19 @@ The engine is designed for high performance with several optimizations:
 - [x] Message Protocol
 - [x] Real-time Multiplayer Support
 
-### 🔄 Phase 5: Plugin Architecture
-- [ ] Plugin Manager
-- [ ] Core Plugin Interfaces
-- [ ] Example Plugins
+### ✅ Phase 5: Plugin Architecture (Complete)
+- [x] Plugin Manager
+- [x] Core Plugin Interfaces
+- [x] Example Plugins
+- [x] Dependency Resolution
+- [x] Error Isolation
 
-### 🔄 Phase 6: Performance Optimization
-- [ ] Dirty Component Tracking
-- [ ] Object Pooling
-- [ ] Memory Optimization
+### ✅ Phase 6: Performance Optimization (Complete)
+- [x] Dirty Component Tracking
+- [x] Object Pooling
+- [x] Memory Optimization
+- [x] Performance Statistics
+- [x] Cache-Friendly Design
 
 See the full [Implementation Plan](PLAN.md) for detailed progress tracking.
 
@@ -349,9 +432,12 @@ bun install
 # Run tests in watch mode
 bun test --watch
 
-# Run the examples  
+# Run the examples
 bun examples/basic-example.ts
 bun examples/event-system-example.ts
+bun examples/websocket-example.ts
+bun examples/plugin-system-example.ts
+bun examples/performance-optimization-example.ts
 ```
 
 ### Pull Request Process
