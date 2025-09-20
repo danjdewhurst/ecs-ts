@@ -67,7 +67,9 @@ jobs:
       - name: 📦 Create distribution archive
         run: |
           mkdir -p release-assets
-          tar -czf release-assets/${{ needs.release-please.outputs.tag_name }}.tar.gz \
+          TAG_NAME="${{ needs.release-please.outputs.tag_name }}"
+          FILENAME="${TAG_NAME//\//-}"  # Replace / with -
+          tar -czf release-assets/${FILENAME}.tar.gz \
             dist/ \
             package.json \
             README.md \
@@ -76,14 +78,14 @@ jobs:
             examples/
 
       - name: 📤 Upload Release Assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release-please.outputs.upload_url }}
-          asset_path: ./release-assets/${{ needs.release-please.outputs.tag_name }}.tar.gz
-          asset_name: ${{ needs.release-please.outputs.tag_name }}.tar.gz
-          asset_content_type: application/gzip
+        run: |
+          TAG_NAME="${{ needs.release-please.outputs.tag_name }}"
+          FILENAME="${TAG_NAME//\//-}"  # Replace / with -
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/gzip" \
+            --data-binary @"./release-assets/${FILENAME}.tar.gz" \
+            "${{ needs.release-please.outputs.upload_url }}?name=${FILENAME}.tar.gz&label=${FILENAME}.tar.gz"
 
       # Future: NPM publishing when ready
       # - name: 📦 Publish to NPM
