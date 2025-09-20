@@ -1,6 +1,6 @@
 {
   "name": "@danjdewhurst/ecs-ts",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A high-performance Entity Component System (ECS) game engine built with TypeScript and Bun",
   "keywords": [
     "ecs",
