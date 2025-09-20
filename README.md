@@ -35,6 +35,12 @@
 - Event-driven architecture with decoupled communication
 - Pluggable architecture for extensibility
 
+🌐 **Multiplayer Ready**
+- High-performance WebSocket server with Bun
+- Real-time client-server communication
+- Type-safe network protocol
+- Built-in authentication and session management
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -56,6 +62,9 @@ bun examples/basic-example.ts
 
 # Run the event system example
 bun examples/event-system-example.ts
+
+# Run the multiplayer WebSocket server example
+bun examples/websocket-example.ts
 ```
 
 ### Basic Usage
@@ -179,6 +188,36 @@ eventComponent.queueEvent('victory', { score: 1000 });
 world.addComponent(entity, eventComponent);
 ```
 
+#### 🌐 **WebSocket Server**
+Create multiplayer games with real-time networking.
+
+```typescript
+import { GameServer } from '@danjdewhurst/ecs-ts/websocket';
+
+// Create multiplayer server
+const server = new GameServer(world, {
+    port: 3000,
+    maxClients: 100,
+    heartbeatInterval: 30000
+});
+
+// Handle client events
+world.subscribeToEvent('client_authenticated', (event) => {
+    const { clientId, entityId } = event.data;
+
+    // Create player entity for new client
+    const playerComponent = createPlayerComponent(clientId, 'Player');
+    const positionComponent = createPositionComponent(0, 0);
+
+    world.addComponent(entityId, playerComponent);
+    world.addComponent(entityId, positionComponent);
+});
+
+// Start server
+await server.start();
+console.log('🎮 Multiplayer server running on ws://localhost:3000/ws');
+```
+
 ### Advanced Features
 
 #### 📊 **Archetype System**
@@ -219,11 +258,12 @@ bun run build
 
 ### Test Coverage
 
-- ✅ **41 Unit Tests** - 100% core functionality coverage
+- ✅ **59 Unit Tests** - 100% core functionality coverage
 - ✅ **EntityManager** - 5 test cases covering ID recycling and lifecycle
 - ✅ **ComponentStorage** - 7 test cases covering storage operations
 - ✅ **World Integration** - 10 test cases covering full ECS workflows
 - ✅ **Event System** - 19 test cases covering event bus, components, and integration
+- ✅ **WebSocket System** - 18 test cases covering networking and multiplayer
 
 ## 📈 Performance
 
@@ -257,10 +297,11 @@ The engine is designed for high performance with several optimizations:
 - [x] System Event Handling
 - [x] Error Resilience
 
-### 🔄 Phase 4: WebSocket Integration (Next)
-- [ ] Bun WebSocket Server
-- [ ] Client Connection Management
-- [ ] Message Protocol
+### ✅ Phase 4: WebSocket Integration (Complete)
+- [x] Bun WebSocket Server
+- [x] Client Connection Management
+- [x] Message Protocol
+- [x] Real-time Multiplayer Support
 
 ### 🔄 Phase 5: Plugin Architecture
 - [ ] Plugin Manager

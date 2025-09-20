@@ -21,6 +21,7 @@ alwaysApply: true
 - `bun run dev` - Development mode with watch
 - `bun examples/basic-example.ts` - Run the basic example
 - `bun examples/event-system-example.ts` - Run the event system example
+- `bun examples/websocket-example.ts` - Run the WebSocket multiplayer example
 
 ## Project Structure
 
@@ -34,7 +35,7 @@ src/
 │   ├── System.ts          # System interfaces
 │   └── SystemScheduler.ts # Dependency-aware scheduling
 ├── core/events/        # Event system (Phase 3) ✅
-├── core/websocket/     # WebSocket integration (Phase 4)
+├── core/websocket/     # WebSocket integration (Phase 4) ✅
 ├── plugins/           # Plugin architecture (Phase 5)
 ├── systems/           # Game systems
 └── components/        # Game components
@@ -106,22 +107,24 @@ describe('FeatureName', () => {
 - Avoid entity creation/destruction in hot loops
 - Cache query results when appropriate
 
-## WebSocket Integration (Future)
+## WebSocket Integration ✅
 
-When implementing Phase 4:
-- Use `Bun.serve()` with built-in WebSocket support
+Phase 4 complete with full multiplayer support:
+- `Bun.serve()` with built-in WebSocket support
 - No external WebSocket libraries needed
-- Leverage Bun's high-performance networking
+- High-performance networking with type-safe protocols
 
 ```typescript
-// Future WebSocket server pattern
-Bun.serve({
-  websocket: {
-    open: (ws) => { /* handle connection */ },
-    message: (ws, message) => { /* handle message */ },
-    close: (ws) => { /* handle disconnect */ }
-  }
+// WebSocket server implementation
+import { GameServer } from './src/core/websocket';
+
+const server = new GameServer(world, {
+  port: 3000,
+  maxClients: 100,
+  heartbeatInterval: 30000
 });
+
+await server.start();
 ```
 
 ## Commit Standards
@@ -208,9 +211,9 @@ feat(core)!: change Component interface to require readonly type
 
 Follow the [PLAN.md](PLAN.md) progression:
 - ✅ **Phase 1**: Core ECS Implementation (Complete)
-- ✅ **Phase 2**: System Architecture (Complete)  
+- ✅ **Phase 2**: System Architecture (Complete)
 - ✅ **Phase 3**: Event System Implementation (Complete)
-- 🔄 **Phase 4**: WebSocket Integration with Bun
+- ✅ **Phase 4**: WebSocket Integration with Bun (Complete)
 - 🔄 **Phase 5**: Plugin Architecture
 - 🔄 **Phase 6**: Performance Optimisation
 
