@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   release-please:
@@ -22,26 +23,8 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: node
-          package-name: "@danjdewhurst/ecs-ts"
-          changelog-types: |
-            [
-              {"type":"feat","section":"✨ Features","hidden":false},
-              {"type":"fix","section":"🐛 Bug Fixes","hidden":false},
-              {"type":"perf","section":"⚡ Performance Improvements","hidden":false},
-              {"type":"refactor","section":"♻️ Code Refactoring","hidden":false},
-              {"type":"docs","section":"📚 Documentation","hidden":false},
-              {"type":"test","section":"🧪 Testing","hidden":false},
-              {"type":"ci","section":"🔧 CI/CD","hidden":false},
-              {"type":"chore","section":"🎨 Maintenance","hidden":false},
-              {"type":"style","section":"💄 Style Changes","hidden":true},
-              {"type":"build","section":"🏗️ Build System","hidden":true}
-            ]
-          extra-files: |
-            README.md
-            examples/basic-example.ts
-            examples/event-system-example.ts
-            examples/websocket-example.ts
+          config-file: .release-please-config.json
+          manifest-file: .release-please-manifest.json
 
   # Build and test when a release is created
   build-and-upload:
