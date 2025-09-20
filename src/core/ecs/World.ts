@@ -3,6 +3,7 @@ import {
     type EventComponent,
     type GameEvent,
 } from '../events/index.ts';
+import { DirtyTracker } from '../performance/index.ts';
 import { ArchetypeManager } from './ArchetypeManager.ts';
 import { type Component, ComponentStorage } from './Component.ts';
 import { EntityManager } from './EntityManager.ts';
@@ -16,6 +17,7 @@ export class World {
     private archetypeManager = new ArchetypeManager();
     private systems: System[] = [];
     private eventBus = new EventBus();
+    private dirtyTracker = new DirtyTracker();
 
     createEntity(): number {
         return this.entityManager.createEntity();
@@ -30,6 +32,9 @@ export class World {
         // Remove from archetype manager
         this.archetypeManager.removeEntity(entityId);
 
+        // Clean up dirty tracking for this entity
+        this.dirtyTracker.clearDirtyEntity(entityId);
+
         // Finally remove from entity manager
         this.entityManager.destroyEntity(entityId);
     }
@@ -42,6 +47,9 @@ export class World {
         const storage = this.getOrCreateStorage<T>(component.type);
         storage.add(entityId, component);
         this.updateArchetype(entityId);
+
+        // Mark the entity as dirty for this component type
+        this.dirtyTracker.markDirty(entityId, component.type);
     }
 
     removeComponent(entityId: number, componentType: string): boolean {
@@ -53,6 +61,8 @@ export class World {
         const removed = storage.remove(entityId);
         if (removed) {
             this.updateArchetype(entityId);
+            // Mark the entity as dirty for this component type
+            this.dirtyTracker.markDirty(entityId, componentType);
         }
         return removed;
     }
@@ -120,6 +130,9 @@ export class World {
 
         // Process any events generated during system updates
         this.eventBus.processEvents();
+
+        // Clear dirty tracking after systems have run
+        this.dirtyTracker.clearDirty();
     }
 
     getEntityCount(): number {
@@ -148,6 +161,35 @@ export class World {
 
     getEventBus(): EventBus {
         return this.eventBus;
+    }
+
+    // Dirty tracking methods for performance optimization
+    getDirtyEntities(componentType: string): Set<number> {
+        return this.dirtyTracker.getDirtyEntities(componentType);
+    }
+
+    getAllDirtyEntities(): Set<number> {
+        return this.dirtyTracker.getAllDirtyEntities();
+    }
+
+    isEntityDirty(entityId: number): boolean {
+        return this.dirtyTracker.isEntityDirty(entityId);
+    }
+
+    isComponentDirty(entityId: number, componentType: string): boolean {
+        return this.dirtyTracker.isComponentDirty(entityId, componentType);
+    }
+
+    getDirtyTrackingStats(): {
+        totalDirtyEntities: number;
+        dirtyComponentTypes: number;
+        averageDirtyPerType: number;
+    } {
+        return this.dirtyTracker.getStats();
+    }
+
+    markComponentDirty(entityId: number, componentType: string): void {
+        this.dirtyTracker.markDirty(entityId, componentType);
     }
 
     private flushComponentEvents(): void {
