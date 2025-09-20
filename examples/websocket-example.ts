@@ -3,6 +3,8 @@
 import {
     createPlayerComponent,
     createPositionComponent,
+    type PlayerComponent,
+    type PositionComponent,
 } from '../src/components';
 import { BaseSystem } from '../src/core/ecs/System';
 import { World } from '../src/core/ecs/World';
@@ -29,8 +31,14 @@ class GameStateSyncSystem extends BaseSystem {
         const gameState = [];
 
         for (const entityId of playerEntities) {
-            const player = world.getComponent(entityId, 'player') as any;
-            const position = world.getComponent(entityId, 'position') as any;
+            const player = world.getComponent(
+                entityId,
+                'player'
+            ) as PlayerComponent | null;
+            const position = world.getComponent(
+                entityId,
+                'position'
+            ) as PositionComponent | null;
 
             if (player && position) {
                 gameState.push({
@@ -182,14 +190,20 @@ function setupEventHandlers(world: World, server: GameServer): void {
     // Handle client messages
     world.subscribeToEvent('client_message', (event) => {
         const { message, clientId } = event.data as {
-            message: any;
+            message: {
+                type: string;
+                payload: { action: string; data: unknown };
+            };
             clientId: string;
         };
 
         // Find player entity for this client
         const playerEntities = world.queryMultiple(['player']);
         const playerEntity = playerEntities.find((entityId) => {
-            const player = world.getComponent(entityId, 'player') as any;
+            const player = world.getComponent(
+                entityId,
+                'player'
+            ) as PlayerComponent | null;
             return player?.clientId === clientId;
         });
 
@@ -229,7 +243,7 @@ function handlePlayerInput(
     server: GameServer,
     playerEntity: number,
     clientId: string,
-    message: any
+    message: { type: string; payload: { action: string; data: unknown } }
 ): void {
     const { action, data } = message.payload;
 
@@ -238,11 +252,16 @@ function handlePlayerInput(
             const position = world.getComponent(
                 playerEntity,
                 'position'
-            ) as any;
-            if (position && data.x !== undefined && data.y !== undefined) {
+            ) as PositionComponent | null;
+            const moveData = data as { x?: number; y?: number };
+            if (
+                position &&
+                moveData.x !== undefined &&
+                moveData.y !== undefined
+            ) {
                 // Validate movement (simple bounds checking)
-                const newX = Math.max(0, Math.min(100, data.x));
-                const newY = Math.max(0, Math.min(100, data.y));
+                const newX = Math.max(0, Math.min(100, moveData.x));
+                const newY = Math.max(0, Math.min(100, moveData.y));
 
                 position.x = newX;
                 position.y = newY;
@@ -273,8 +292,12 @@ function handlePlayerInput(
         }
 
         case 'chat': {
-            const player = world.getComponent(playerEntity, 'player') as any;
-            if (player && data.message) {
+            const player = world.getComponent(
+                playerEntity,
+                'player'
+            ) as PlayerComponent | null;
+            const chatData = data as { message?: string };
+            if (player && chatData.message) {
                 const chatMessage = {
                     type: 'event' as const,
                     timestamp: Date.now(),
@@ -282,12 +305,12 @@ function handlePlayerInput(
                         eventType: 'chat_message',
                         eventData: {
                             from: player.name,
-                            message: data.message,
+                            message: chatData.message,
                         },
                     },
                 };
 
-                console.log(`💬 ${player.name}: ${data.message}`);
+                console.log(`💬 ${player.name}: ${chatData.message}`);
                 server.broadcast(chatMessage);
             }
             break;

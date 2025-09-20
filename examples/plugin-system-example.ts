@@ -9,6 +9,7 @@
  * - Storage and networking plugin implementations
  */
 
+import type { ServerWebSocket } from 'bun';
 import type { Component } from '../src/core/ecs/Component.ts';
 import { BaseSystem } from '../src/core/ecs/System.ts';
 import { World } from '../src/core/ecs/World.ts';
@@ -179,7 +180,11 @@ class MemoryStoragePlugin extends BaseStoragePlugin {
 
         // Listen for player events and save data
         world.subscribeToEvent('player-level-up', async (event) => {
-            const { entityId, playerName, newLevel } = event.data as any;
+            const { entityId, playerName, newLevel } = event.data as {
+                entityId: number;
+                playerName: string;
+                newLevel: number;
+            };
             await this.save(`player:${entityId}:level`, newLevel);
             console.log(`💾 Saved level ${newLevel} for player ${playerName}`);
         });
@@ -277,9 +282,15 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
     override readonly dependencies = ['core-game'];
 
     private clients = new Map<string, GameClient>();
-    private messageHandlers = new Map<string, Function[]>();
-    private connectHandlers: Function[] = [];
-    private disconnectHandlers: Function[] = [];
+    private messageHandlers = new Map<
+        string,
+        ((clientId: string, message: unknown, client: GameClient) => void)[]
+    >();
+    private connectHandlers: ((client: GameClient) => void)[] = [];
+    private disconnectHandlers: ((
+        clientId: string,
+        reason?: string
+    ) => void)[] = [];
 
     constructor() {
         super({
@@ -367,7 +378,9 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
             console.log(
                 `🔌 Client ${clientId} disconnected: ${reason || 'No reason'}`
             );
-            this.disconnectHandlers.forEach((h) => h(clientId, reason));
+            this.disconnectHandlers.forEach((h) => {
+                h(clientId, reason);
+            });
         }
     }
 
@@ -379,7 +392,14 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
         return this.clients.size;
     }
 
-    onClientMessage(messageType: string, handler: Function): () => void {
+    onClientMessage(
+        messageType: string,
+        handler: (
+            clientId: string,
+            message: unknown,
+            client: GameClient
+        ) => void
+    ): () => void {
         if (!this.messageHandlers.has(messageType)) {
             this.messageHandlers.set(messageType, []);
         }
@@ -393,7 +413,7 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
         };
     }
 
-    onClientConnect(handler: Function): () => void {
+    onClientConnect(handler: (client: GameClient) => void): () => void {
         this.connectHandlers.push(handler);
         return () => {
             const index = this.connectHandlers.indexOf(handler);
@@ -401,7 +421,9 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
         };
     }
 
-    onClientDisconnect(handler: Function): () => void {
+    onClientDisconnect(
+        handler: (clientId: string, reason?: string) => void
+    ): () => void {
         this.disconnectHandlers.push(handler);
         return () => {
             const index = this.disconnectHandlers.indexOf(handler);
@@ -415,7 +437,7 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
     ): void {
         const client: GameClient = {
             id: clientId,
-            ws: {} as any,
+            ws: {} as ServerWebSocket<unknown>,
             lastHeartbeat: Date.now(),
             isAuthenticated: true,
             metadata: { playerName },
@@ -423,7 +445,9 @@ class MockNetworkPlugin extends BaseNetworkPlugin {
 
         this.clients.set(clientId, client);
         console.log(`🔗 Client connected: ${clientId} (${playerName})`);
-        this.connectHandlers.forEach((h) => h(client));
+        this.connectHandlers.forEach((h) => {
+            h(client);
+        });
     }
 }
 

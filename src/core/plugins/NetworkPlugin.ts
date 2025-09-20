@@ -1,3 +1,4 @@
+import type { World } from '../ecs/World';
 import type { GameClient, ServerMessage } from '../websocket/GameClient.ts';
 import type { NetworkMessage } from '../websocket/NetworkMessage.ts';
 import type { Plugin } from './Plugin.ts';
@@ -97,7 +98,11 @@ export interface NetworkPlugin extends Plugin {
      */
     onClientMessage(
         messageType: string,
-        handler: (clientId: string, message: any, client: GameClient) => void
+        handler: (
+            clientId: string,
+            message: unknown,
+            client: GameClient
+        ) => void
     ): () => void;
 
     /**
@@ -168,7 +173,7 @@ export abstract class BaseNetworkPlugin implements NetworkPlugin {
         };
     }
 
-    abstract initialize(world: any): Promise<void>;
+    abstract initialize(world: World): Promise<void>;
     shutdown?(): Promise<void> {
         // Default empty implementation
         return Promise.resolve();
@@ -198,7 +203,11 @@ export abstract class BaseNetworkPlugin implements NetworkPlugin {
     abstract getClientCount(): number;
     abstract onClientMessage(
         messageType: string,
-        handler: (clientId: string, message: any, client: GameClient) => void
+        handler: (
+            clientId: string,
+            message: unknown,
+            client: GameClient
+        ) => void
     ): () => void;
     abstract onClientConnect(handler: (client: GameClient) => void): () => void;
     abstract onClientDisconnect(
