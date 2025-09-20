@@ -129,22 +129,22 @@ Task-oriented documentation for common development scenarios.
 
 **guides/**
 - [x] **entities-and-components.md**: Design patterns, composition strategies
-- [ ] **systems-and-scheduling.md**: System architecture, dependencies
-- [ ] **events-and-communication.md**: Decoupled communication patterns
-- [ ] **performance-optimization.md**: Profiling, bottleneck identification
-- [ ] **multiplayer-networking.md**: State synchronization, conflict resolution
-- [ ] **plugin-development.md**: Creating extensions, publishing patterns
-- [ ] **testing-strategies.md**: Unit tests, integration tests, mocking
+- [x] **systems-and-scheduling.md**: System architecture, dependencies
+- [x] **events-and-communication.md**: Decoupled communication patterns
+- [x] **performance-optimization.md**: Profiling, bottleneck identification
+- [x] **multiplayer-networking.md**: State synchronization, conflict resolution
+- [x] **plugin-development.md**: Creating extensions, publishing patterns
+- [x] **testing-strategies.md**: Unit tests, integration tests, mocking
 
 ### Priority 5: Examples and Tutorials
 Working code examples with detailed explanations.
 
 **examples/**
 - [x] **basic-usage.md**: Annotated version of examples/basic-example.ts
-- [ ] **event-system-demo.md**: Event-driven architecture patterns
-- [ ] **websocket-multiplayer.md**: Real-time multiplayer implementation
-- [ ] **plugin-system-demo.md**: Plugin creation and integration
-- [ ] **performance-optimization-demo.md**: Optimization techniques in practice
+- [x] **event-system-demo.md**: Event-driven architecture patterns
+- [x] **websocket-multiplayer.md**: Real-time multiplayer implementation
+- [x] **plugin-system-demo.md**: Plugin creation and integration
+- [x] **performance-optimization-demo.md**: Optimization techniques in practice
 
 ## Documentation Standards
 
