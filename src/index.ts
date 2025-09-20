@@ -22,3 +22,9 @@ export {
     EventComponent,
     type GameEvent,
 } from './core/events/index.ts';
+// Performance Optimization exports
+export * from './core/performance/index.ts';
+export {
+    DirtyTracker,
+    ObjectPool,
+} from './core/performance/index.ts';
