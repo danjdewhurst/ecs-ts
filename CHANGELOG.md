@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.5.0...ecs-ts/v0.6.0) (2025-09-20)
+
+
+### ✨ Features
+
+* **plugins:** implement complete plugin architecture with dependency resolution ([ca451a6](https://github.com/danjdewhurst/ecs-ts/commit/ca451a6f8bf685cd7b5f7613fcaa140f305d96a3))
+
+
+### 📚 Documentation
+
+* update PLAN.md to reflect Phase 5 completion ([40c1393](https://github.com/danjdewhurst/ecs-ts/commit/40c13930abe0f1b5b36ac6dab3c63720118015ab))
+
 ## [0.5.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.4.0...ecs-ts/v0.5.0) (2025-09-20)
 
 
