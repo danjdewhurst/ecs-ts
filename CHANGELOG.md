@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.1...ecs-ts/v0.6.2) (2025-09-20)
+
+
+### 🐛 Bug Fixes
+
+* resolve linting and TypeScript compilation errors ([674fffb](https://github.com/danjdewhurst/ecs-ts/commit/674fffbc2ddaa214b96b2c68b2e898b7c10ba31d))
+
 ## [0.6.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.0...ecs-ts/v0.6.1) (2025-09-20)
 
 
