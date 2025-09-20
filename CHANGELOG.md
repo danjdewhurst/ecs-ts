@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.10](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.9...ecs-ts/v0.6.10) (2025-09-20)
+
+
+### 📚 Documentation
+
+* complete comprehensive API documentation and guides ([b13f3e2](https://github.com/danjdewhurst/ecs-ts/commit/b13f3e2614d5dafc8343c3f55e9feeda4fc74e5f))
+* update DOCS_PLAN.md to reflect completed documentation ([ac9b79d](https://github.com/danjdewhurst/ecs-ts/commit/ac9b79da1ca64ab9d45d055f4588d1507e7a08ae))
+
 ## [0.6.9](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.8...ecs-ts/v0.6.9) (2025-09-20)
 
 
