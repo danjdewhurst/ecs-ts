@@ -1,0 +1,17 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussion
+    url: https://github.com/danjdewhurst/ecs-ts/discussions
+    about: Ask questions, share ideas, or discuss the ECS Game Engine with the community
+
+  - name: 📖 Documentation
+    url: https://github.com/danjdewhurst/ecs-ts#readme
+    about: Read the project documentation and examples
+
+  - name: 🚀 Roadmap
+    url: https://github.com/danjdewhurst/ecs-ts/blob/main/PLAN.md
+    about: Check out the project roadmap and planned features
+
+  - name: 📧 Contact Maintainer
+    url: mailto:danjdewhurst@gmail.com
+    about: For security vulnerabilities or private inquiries

@@ -1,0 +1,117 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in the ECS Game Engine
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: ["danjdewhurst"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below to help us identify and fix the issue.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please check that you've completed these steps before submitting the bug report.
+      options:
+        - label: I have searched existing issues to ensure this bug hasn't been reported already
+          required: true
+        - label: I can reproduce this bug consistently
+          required: true
+        - label: I am using the latest version of the ECS Game Engine
+          required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior.
+      placeholder: |
+        1. Create a World instance
+        2. Add a system with specific configuration
+        3. Call world.update()
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: A clear description of what actually happened.
+      placeholder: What actually happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Example
+      description: If applicable, add a minimal code example that reproduces the bug.
+      render: typescript
+      placeholder: |
+        import { World } from '@danjdewhurst/ecs-ts';
+
+        // Your code here
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: ECS Game Engine Version
+      description: What version of the ECS Game Engine are you using?
+      placeholder: "v0.4.0"
+    validations:
+      required: true
+
+  - type: input
+    id: bun-version
+    attributes:
+      label: Bun Version
+      description: What version of Bun are you using?
+      placeholder: "1.2.17"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - macOS
+        - Windows
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here, such as screenshots, error logs, or related issues.
+      placeholder: Any additional information that might be helpful...
+    validations:
+      required: false

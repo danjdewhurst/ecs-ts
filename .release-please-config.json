@@ -1,0 +1,38 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "@danjdewhurst/ecs-ts",
+      "changelog-sections": [
+        {"type": "feat", "section": "✨ Features", "hidden": false},
+        {"type": "fix", "section": "🐛 Bug Fixes", "hidden": false},
+        {"type": "perf", "section": "⚡ Performance Improvements", "hidden": false},
+        {"type": "refactor", "section": "♻️ Code Refactoring", "hidden": false},
+        {"type": "docs", "section": "📚 Documentation", "hidden": false},
+        {"type": "test", "section": "🧪 Testing", "hidden": false},
+        {"type": "ci", "section": "🔧 CI/CD", "hidden": false},
+        {"type": "chore", "section": "🎨 Maintenance", "hidden": false},
+        {"type": "style", "section": "💄 Style Changes", "hidden": true},
+        {"type": "build", "section": "🏗️ Build System", "hidden": true}
+      ],
+      "extra-files": [
+        "README.md",
+        "examples/basic-example.ts",
+        "examples/event-system-example.ts",
+        "examples/websocket-example.ts"
+      ],
+      "versioning-strategy": "default",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": false
+    }
+  },
+  "bootstrap-sha": "3946714f8f7e7d7e8e8e8e8e8e8e8e8e8e8e8e8e",
+  "group-pull-request-title-pattern": "chore: release ${version}",
+  "pull-request-title-pattern": "chore: release ${version}",
+  "pull-request-header": "🚀 This PR contains the automated release for the next version",
+  "separate-pull-requests": false,
+  "tag-separator": "/",
+  "include-v-in-tag": true
+}

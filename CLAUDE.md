@@ -23,6 +23,14 @@ alwaysApply: true
 - `bun examples/event-system-example.ts` - Run the event system example
 - `bun examples/websocket-example.ts` - Run the WebSocket multiplayer example
 
+**Release & Publishing Commands:**
+- `bun run commit` - Interactive conventional commit creation (uses commitizen)
+- `bun run changelog` - Generate changelog from conventional commits
+- `bun run build` - Build distribution with TypeScript declarations
+- `bun run build:clean` - Clean build (removes dist/ first)
+- `bun run check` - Run Biome linting and formatting checks
+- `bun run check:fix` - Auto-fix linting and formatting issues
+
 ## Project Structure
 
 ```
@@ -194,18 +202,81 @@ feat(core)!: change Component interface to require readonly type
    ```bash
    bun test         # Ensure all tests pass
    bun run typecheck # Verify TypeScript compilation
+   bun run check    # Run linting and formatting
    ```
 
-3. **Commit Changes:**
+3. **Commit Changes (Automated Release System):**
    ```bash
    git add .
+   bun run commit   # Interactive conventional commit creation
+   # OR manually:
    git commit -m "feat(core): add new ECS feature"
    ```
 
-4. **Run Example:**
+4. **Push Changes:**
+   ```bash
+   git push origin main
+   # Release Please will automatically create release PRs based on conventional commits
+   ```
+
+5. **Run Example:**
    ```bash
    bun examples/basic-example.ts
    ```
+
+## Release Management & Automation
+
+**Automated Release System:**
+- Uses Release Please for automated version management
+- Conventional commits trigger automatic version bumps
+- Automated changelog generation from commit history
+- GitHub releases created automatically when release PRs are merged
+
+**Release Process:**
+1. **Development**: Use conventional commits (feat, fix, etc.)
+2. **Release PR**: Release Please automatically creates PRs with version bumps
+3. **Review & Merge**: Maintainer reviews and merges release PR
+4. **GitHub Release**: Automatically created with assets and changelog
+5. **NPM Publishing**: Ready (currently disabled while private)
+
+**Version Bumping Rules:**
+- `feat: new feature` → Minor version bump (0.4.0 → 0.5.0)
+- `fix: bug fix` → Patch version bump (0.4.0 → 0.4.1)
+- `feat!: breaking change` → Major version bump (0.4.0 → 1.0.0)
+- `docs:, test:, chore:` → No version bump
+
+**Release Commands:**
+```bash
+# Interactive commit (recommended)
+bun run commit
+
+# Check what would be included in next release
+git log --oneline $(git describe --tags --abbrev=0)..HEAD
+
+# Generate changelog manually (for preview)
+bun run changelog
+
+# Build for release
+bun run build:clean
+```
+
+**Security & Quality Gates:**
+- All releases include security scanning (Trivy)
+- Dependency vulnerability checks
+- Performance benchmark tracking
+- Comprehensive test coverage requirements
+- Type checking and linting validation
+
+**Release Assets:**
+- Source code archives with checksums
+- Built distribution packages
+- TypeScript declaration files
+- Updated documentation and examples
+
+**Pre-release Support:**
+- Alpha: `git tag v0.5.0-alpha.1`
+- Beta: `git tag v0.5.0-beta.1`
+- RC: `git tag v0.5.0-rc.1`
 
 ## Implementation Phases
 
@@ -217,6 +288,52 @@ Follow the [PLAN.md](PLAN.md) progression:
 - 🔄 **Phase 5**: Plugin Architecture
 - 🔄 **Phase 6**: Performance Optimisation
 
+## Claude Release Assistance
+
+**When helping with releases, Claude should:**
+
+1. **Always use conventional commits** when making changes:
+   ```bash
+   feat(core): add new system architecture
+   fix(events): resolve memory leak in event handlers
+   docs: update API documentation for v0.5.0
+   test(websocket): add integration tests for multiplayer
+   ```
+
+2. **Run quality checks before committing:**
+   ```bash
+   bun test && bun run typecheck && bun run check
+   ```
+
+3. **Use the interactive commit tool** for complex changes:
+   ```bash
+   bun run commit
+   ```
+
+4. **Check release readiness** by reviewing:
+   - All tests passing
+   - TypeScript compilation clean
+   - No linting errors
+   - Performance benchmarks stable
+   - Documentation updated
+
+5. **Help create release PRs** by ensuring:
+   - CHANGELOG.md is accurate
+   - Breaking changes are documented
+   - Migration guides provided (if needed)
+   - Version numbers are consistent
+
+6. **Never manually edit version numbers** - let Release Please handle this
+7. **Always test builds** with `bun run build:clean` before releases
+8. **Update examples** when APIs change
+9. **Verify security** with dependency audits
+
+**Release Troubleshooting:**
+- If Release Please doesn't create PR: check conventional commit format
+- If builds fail: verify TypeScript configuration and dependencies
+- If tests fail: ensure all changes include proper test coverage
+- If security scans fail: review and update vulnerable dependencies
+
 ## Notes
 
 - This is a game engine, not a web application
@@ -224,3 +341,4 @@ Follow the [PLAN.md](PLAN.md) progression:
 - All APIs should be game-developer friendly
 - Maintain comprehensive test coverage
 - Document performance characteristics
+- **Always use conventional commits for proper release automation**

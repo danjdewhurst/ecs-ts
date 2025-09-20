@@ -115,13 +115,75 @@ We welcome feature requests! Please [open an issue](https://github.com/danjdewhu
 
 ## 📦 Release Process
 
-We use semantic versioning (SemVer) and automated releases:
+We use [Semantic Versioning](https://semver.org/) and [Conventional Commits](https://www.conventionalcommits.org/) for automated releases.
 
-- **Patch** (1.0.1): Bug fixes and minor improvements
-- **Minor** (1.1.0): New features that are backward compatible
-- **Major** (2.0.0): Breaking changes
+### Automated Release Workflow
 
-Releases are triggered by git tags and automated via GitHub Actions.
+1. **Conventional Commits**: Use conventional commit format for all commits
+2. **Release Please**: Automatically creates release PRs based on commits
+3. **GitHub Releases**: Automatically created when release PRs are merged
+4. **Assets**: Build artifacts and distributions attached to releases
+
+### Commit Message Format
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+- `feat`: New feature (bumps minor version)
+- `fix`: Bug fix (bumps patch version)
+- `feat!` or `BREAKING CHANGE`: Breaking change (bumps major version)
+- `docs`: Documentation changes
+- `test`: Adding tests
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `chore`: Maintenance tasks
+
+**Scopes:**
+- `core`: Core ECS engine
+- `systems`: System-related changes
+- `components`: Component definitions
+- `events`: Event system
+- `websocket`: WebSocket functionality
+- `plugins`: Plugin architecture
+
+**Examples:**
+```bash
+feat(core): add entity ID recycling to EntityManager
+fix(systems): resolve dependency resolution in SystemScheduler
+feat(events)!: change event subscription API
+
+BREAKING CHANGE: Event subscription now requires explicit event types
+```
+
+### Using Commitizen
+
+For interactive commit creation:
+```bash
+bun run commit
+```
+
+### Version Types
+
+- **Major** (1.0.0 → 2.0.0): Breaking changes
+- **Minor** (1.0.0 → 1.1.0): New features (backward compatible)
+- **Patch** (1.0.0 → 1.0.1): Bug fixes
+- **Pre-release** (1.0.0-alpha.1): Alpha/Beta/RC versions
+
+### Release Checklist
+
+Before major releases:
+- [ ] All tests pass
+- [ ] Performance benchmarks reviewed
+- [ ] Security scan completed
+- [ ] Documentation updated
+- [ ] Breaking changes documented
+- [ ] Migration guide created (if needed)
 
 ## 🎯 Current Priorities
 

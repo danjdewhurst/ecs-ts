@@ -1,12 +1,69 @@
 {
-  "name": "@danjdewhurst/ecs-ts/game-engine",
-  "module": "index.ts",
+  "name": "@danjdewhurst/ecs-ts",
+  "version": "0.4.0",
+  "description": "A high-performance Entity Component System (ECS) game engine built with TypeScript and Bun",
+  "keywords": [
+    "ecs",
+    "entity-component-system",
+    "game-engine",
+    "typescript",
+    "bun",
+    "gamedev",
+    "performance",
+    "archetype",
+    "game-development",
+    "realtime",
+    "websocket",
+    "multiplayer"
+  ],
+  "homepage": "https://github.com/danjdewhurst/ecs-ts#readme",
+  "bugs": {
+    "url": "https://github.com/danjdewhurst/ecs-ts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danjdewhurst/ecs-ts.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Dan Dewhurst",
+    "email": "danjdewhurst@gmail.com",
+    "url": "https://github.com/danjdewhurst"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./websocket": {
+      "import": "./dist/websocket/index.js",
+      "require": "./dist/websocket/index.js",
+      "types": "./dist/websocket/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "type": "module",
   "private": true,
+  "engines": {
+    "bun": ">=1.1.0",
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "test": "bun test",
-    "build": "bun build src/index.ts --outdir dist",
+    "test:coverage": "bun test --coverage",
+    "build": "bun run build:types && bun build src/index.ts --outdir dist --target node",
+    "build:types": "bunx tsc --project tsconfig.build.json --emitDeclarationOnly",
+    "build:clean": "rm -rf dist && bun run build",
     "lint": "bunx biome lint .",
     "lint:fix": "bunx biome lint --write .",
     "format": "bunx biome format .",
@@ -14,11 +71,20 @@
     "check": "bunx biome check .",
     "check:fix": "bunx biome check --write .",
     "typecheck": "bunx tsc --noEmit",
+    "commit": "cz",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "prepack": "bun run build:clean",
+    "prepublishOnly": "bun run test && bun run typecheck && bun run build:clean",
     "prepare": "husky"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/bun": "latest",
+    "commitizen": "^4.3.1",
+    "conventional-changelog-cli": "^5.0.0",
+    "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6"
   },
@@ -29,5 +95,10 @@
     "*.{ts,tsx}": [
       "bunx biome check --write --files-ignore-unknown=true"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

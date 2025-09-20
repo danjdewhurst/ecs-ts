@@ -1,0 +1,161 @@
+name: 🚀 Release Tracking
+description: Track preparation and tasks for an upcoming release
+title: "Release v"
+labels: ["release", "tracking"]
+assignees: ["danjdewhurst"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue tracks the preparation and tasks for an upcoming release of the ECS Game Engine.
+
+  - type: input
+    id: version
+    attributes:
+      label: Target Version
+      description: What version is being released?
+      placeholder: "v0.5.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Release Type
+      description: What type of release is this?
+      options:
+        - Major Release (Breaking changes)
+        - Minor Release (New features, backward compatible)
+        - Patch Release (Bug fixes)
+        - Pre-release (Alpha/Beta/RC)
+    validations:
+      required: true
+
+  - type: textarea
+    id: goals
+    attributes:
+      label: Release Goals
+      description: What are the main goals and features for this release?
+      placeholder: |
+        - Implement plugin architecture
+        - Performance optimizations
+        - New component types
+        - Documentation improvements
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: features
+    attributes:
+      label: Features & Changes
+      description: Track the implementation status of major features and changes
+      options:
+        - label: "Core features implemented"
+        - label: "API changes documented"
+        - label: "Migration guide created (for breaking changes)"
+        - label: "Examples updated"
+        - label: "Performance benchmarks updated"
+
+  - type: checkboxes
+    id: quality
+    attributes:
+      label: Quality Assurance
+      description: Ensure quality standards are met before release
+      options:
+        - label: "All tests passing"
+        - label: "Test coverage maintained/improved"
+        - label: "Performance benchmarks run"
+        - label: "Manual testing completed"
+        - label: "Memory leak testing completed"
+        - label: "Cross-platform compatibility verified"
+
+  - type: checkboxes
+    id: documentation
+    attributes:
+      label: Documentation
+      description: Ensure documentation is complete and up-to-date
+      options:
+        - label: "CHANGELOG.md updated"
+        - label: "README.md updated"
+        - label: "API documentation updated"
+        - label: "Migration guide created (if needed)"
+        - label: "Release notes drafted"
+        - label: "Examples tested and working"
+
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security & Dependencies
+      description: Security and dependency management checklist
+      options:
+        - label: "Security audit completed"
+        - label: "Dependencies updated"
+        - label: "Vulnerability scan passed"
+        - label: "SBOM (Software Bill of Materials) generated"
+
+  - type: checkboxes
+    id: release-process
+    attributes:
+      label: Release Process
+      description: Release execution checklist
+      options:
+        - label: "Release branch created (if applicable)"
+        - label: "Version number updated"
+        - label: "Release tag created"
+        - label: "GitHub release created"
+        - label: "Assets uploaded"
+        - label: "NPM package published (when ready)"
+        - label: "Release announcement posted"
+
+  - type: textarea
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: List any breaking changes and migration instructions (if applicable)
+      placeholder: |
+        - Component interface now requires readonly type property
+        - System.update() signature changed to include deltaTime parameter
+
+        Migration:
+        - Update component definitions to include readonly type
+        - Update system update methods to accept deltaTime
+    validations:
+      required: false
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Release Timeline
+      description: Key dates and milestones for this release
+      placeholder: |
+        - Feature freeze: [Date]
+        - Code freeze: [Date]
+        - Release candidate: [Date]
+        - Final release: [Date]
+    validations:
+      required: false
+
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Release Blockers
+      description: List any issues or tasks that must be completed before release
+      placeholder: |
+        - Issue #123: Critical performance regression
+        - Task: Complete performance optimization
+        - Review: Security audit results
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any additional notes or considerations for this release
+      placeholder: |
+        - Consider coordinating with major users before release
+        - Plan communication strategy for breaking changes
+        - Prepare rollback plan if issues arise
+    validations:
+      required: false

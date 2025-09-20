@@ -1,0 +1,112 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      upload_url: ${{ steps.release.outputs.upload_url }}
+    steps:
+      - name: 🚀 Create Release PR or Release
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: "@danjdewhurst/ecs-ts"
+          changelog-types: |
+            [
+              {"type":"feat","section":"✨ Features","hidden":false},
+              {"type":"fix","section":"🐛 Bug Fixes","hidden":false},
+              {"type":"perf","section":"⚡ Performance Improvements","hidden":false},
+              {"type":"refactor","section":"♻️ Code Refactoring","hidden":false},
+              {"type":"docs","section":"📚 Documentation","hidden":false},
+              {"type":"test","section":"🧪 Testing","hidden":false},
+              {"type":"ci","section":"🔧 CI/CD","hidden":false},
+              {"type":"chore","section":"🎨 Maintenance","hidden":false},
+              {"type":"style","section":"💄 Style Changes","hidden":true},
+              {"type":"build","section":"🏗️ Build System","hidden":true}
+            ]
+          extra-files: |
+            README.md
+            examples/basic-example.ts
+            examples/event-system-example.ts
+            examples/websocket-example.ts
+
+  # Build and test when a release is created
+  build-and-upload:
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+
+    env:
+      BUN_VERSION: '1.2.17'
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: 📂 Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+          key: ${{ runner.os }}-bun-release-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🧪 Run tests
+        run: bun test --coverage
+
+      - name: 🔍 TypeScript Check
+        run: bun run typecheck
+
+      - name: 🏗️ Build project
+        run: bun run build
+
+      - name: 📦 Create distribution archive
+        run: |
+          mkdir -p release-assets
+          tar -czf release-assets/ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz \
+            dist/ \
+            package.json \
+            README.md \
+            CHANGELOG.md \
+            LICENSE \
+            examples/
+
+      - name: 📤 Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release-please.outputs.upload_url }}
+          asset_path: ./release-assets/ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz
+          asset_name: ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz
+          asset_content_type: application/gzip
+
+      # Future: NPM publishing when ready
+      # - name: 📦 Publish to NPM
+      #   if: ${{ !contains(needs.release-please.outputs.tag_name, '-') }}
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      #     npm publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
