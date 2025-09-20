@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.8](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.7...ecs-ts/v0.6.8) (2025-09-20)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** handle forward slashes in release archive paths ([d90ac2f](https://github.com/danjdewhurst/ecs-ts/commit/d90ac2f396afb21e8016f0d874fa943aa54f167c))
+
 ## [0.6.7](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.6...ecs-ts/v0.6.7) (2025-09-20)
 
 
