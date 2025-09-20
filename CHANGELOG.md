@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.0 (2025-09-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **ci:** Release process now uses conventional commits for automated versioning
+* **events:** World.update() now processes events before and after system execution, potentially affecting system execution timing.
+
+### Features
+
+* **ci:** implement comprehensive GitHub releases automation ([69156d0](https://github.com/danjdewhurst/ecs-ts/commit/69156d057870ebcbca8aa7f7227caf6d2005a9bd))
+* **events:** implement complete event system with comprehensive testing ([60dfb8c](https://github.com/danjdewhurst/ecs-ts/commit/60dfb8c5f15e89c49e6f7d93cd13d6cd32506f09))
+* initial implementation of ECS Game Engine ([d0b53c9](https://github.com/danjdewhurst/ecs-ts/commit/d0b53c96e8a4187dd7313f1b4636030f4cb855dd))
+* **websocket:** implement complete WebSocket multiplayer system ([857b4ce](https://github.com/danjdewhurst/ecs-ts/commit/857b4ce475490f36a4231f9d82fe32e5ab81e2ac))
+
+
+### Bug Fixes
+
+* remove unneeded lines from husky pre commit ([73c0991](https://github.com/danjdewhurst/ecs-ts/commit/73c0991029c7ff86b94613cd8ccdca0459eeca18))
+
 ## [Unreleased]
 
 ### Added
