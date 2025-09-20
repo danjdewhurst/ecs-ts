@@ -67,7 +67,7 @@ jobs:
       - name: 📦 Create distribution archive
         run: |
           mkdir -p release-assets
-          tar -czf release-assets/ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz \
+          tar -czf release-assets/${{ needs.release-please.outputs.tag_name }}.tar.gz \
             dist/ \
             package.json \
             README.md \
@@ -81,8 +81,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release-please.outputs.upload_url }}
-          asset_path: ./release-assets/ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz
-          asset_name: ecs-ts-${{ needs.release-please.outputs.tag_name }}.tar.gz
+          asset_path: ./release-assets/${{ needs.release-please.outputs.tag_name }}.tar.gz
+          asset_name: ${{ needs.release-please.outputs.tag_name }}.tar.gz
           asset_content_type: application/gzip
 
       # Future: NPM publishing when ready
