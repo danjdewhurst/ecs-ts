@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.11...ecs-ts/v0.7.0) (2025-09-21)
+
+
+### ✨ Features
+
+* **ci:** enable automated npm publishing on releases ([f7f04ec](https://github.com/danjdewhurst/ecs-ts/commit/f7f04ec03d354a713c53311a7d94fbd4295b143d))
+* enable npm publishing by removing private flag ([c412ca2](https://github.com/danjdewhurst/ecs-ts/commit/c412ca29e41fa5a1f98f9d11f84e32fdf865be16))
+
 ## [0.6.11](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.10...ecs-ts/v0.6.11) (2025-09-20)
 
 
