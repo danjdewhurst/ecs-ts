@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.0...ecs-ts/v0.7.1) (2025-09-21)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** add publishConfig for public scoped package publishing ([404bcd8](https://github.com/danjdewhurst/ecs-ts/commit/404bcd8b73371c96f7a3058895007fa90b95b022))
+
 ## [0.7.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.6.11...ecs-ts/v0.7.0) (2025-09-21)
 
 
