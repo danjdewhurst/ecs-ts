@@ -69,7 +69,13 @@ export class PluginManager {
             await this.initializePlugin(plugin);
 
             // Update metadata
-            const meta = this.metadata.get(plugin.name)!;
+            const meta = this.metadata.get(plugin.name);
+            if (!meta) {
+                throw new PluginError(
+                    `Plugin metadata not found for '${plugin.name}'`,
+                    plugin.name
+                );
+            }
             this.metadata.set(plugin.name, {
                 ...meta,
                 isLoaded: true,
@@ -283,8 +289,18 @@ export class PluginManager {
         }
 
         while (queue.length > 0) {
-            const current = queue.shift()!;
-            const plugin = this.plugins.get(current)!;
+            const current = queue.shift();
+            if (!current) {
+                throw new Error(
+                    'Unexpected empty queue during topological sort'
+                );
+            }
+            const plugin = this.plugins.get(current);
+            if (!plugin) {
+                throw new Error(
+                    `Plugin '${current}' not found during topological sort`
+                );
+            }
             result.push(plugin);
 
             // Remove edges

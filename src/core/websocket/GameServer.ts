@@ -141,7 +141,9 @@ export class GameServer {
         return true;
     }
 
-    private handleHttpRequest(request: Request): Response | Promise<Response> {
+    private handleHttpRequest(
+        request: Request
+    ): Response | Promise<Response> | undefined {
         const url = new URL(request.url);
 
         if (url.pathname === '/ws') {
@@ -151,7 +153,7 @@ export class GameServer {
 
             const success = this.server?.upgrade(request);
             if (success) {
-                return undefined!;
+                return undefined;
             }
         }
 

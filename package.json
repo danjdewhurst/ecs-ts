@@ -70,6 +70,7 @@
     "format:fix": "bunx biome format --write .",
     "check": "bunx biome check .",
     "check:fix": "bunx biome check --write .",
+    "fix": "bunx biome check --write . && bunx tsc --noEmit",
     "typecheck": "bunx tsc --noEmit",
     "commit": "cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",

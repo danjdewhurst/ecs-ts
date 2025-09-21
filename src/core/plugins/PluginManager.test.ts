@@ -54,7 +54,7 @@ describe('PluginManager', () => {
                 version: '1.0.0',
                 initialize: async () => {},
                 shutdown: 'not-a-function',
-            } as any;
+            } as unknown as Plugin;
 
             await expect(pluginManager.loadPlugin(plugin)).rejects.toThrow(
                 'Plugin shutdown must be a function if provided'

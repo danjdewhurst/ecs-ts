@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test } from 'bun:test';
+import type { ServerWebSocket } from 'bun';
 import { World } from '../ecs/World.ts';
 import type { GameClient, ServerMessage } from '../websocket/GameClient.ts';
 import type { NetworkMessage } from '../websocket/NetworkMessage.ts';
@@ -7,7 +8,10 @@ import { PluginManager } from './PluginManager.ts';
 import {
     BaseStoragePlugin,
     type LoadOptions,
+    type StorageMetadata,
     type StorageOperation,
+    type StorageOptions,
+    type StorageStats,
 } from './StoragePlugin.ts';
 
 describe('Plugin Interfaces', () => {
@@ -25,9 +29,19 @@ describe('Plugin Interfaces', () => {
             readonly version = '1.0.0';
 
             private clients = new Map<string, GameClient>();
-            private messageHandlers = new Map<string, Function[]>();
-            private connectHandlers: Function[] = [];
-            private disconnectHandlers: Function[] = [];
+            private messageHandlers = new Map<
+                string,
+                ((
+                    clientId: string,
+                    message: unknown,
+                    client: GameClient
+                ) => void)[]
+            >();
+            private connectHandlers: ((client: GameClient) => void)[] = [];
+            private disconnectHandlers: ((
+                clientId: string,
+                reason?: string
+            ) => void)[] = [];
 
             async initialize(): Promise<void> {
                 // Mock initialization
@@ -92,9 +106,9 @@ describe('Plugin Interfaces', () => {
                 const client = this.clients.get(clientId);
                 if (client) {
                     this.clients.delete(clientId);
-                    this.disconnectHandlers.forEach((handler) =>
-                        handler(clientId, reason)
-                    );
+                    this.disconnectHandlers.forEach((handler) => {
+                        handler(clientId, reason);
+                    });
                 }
             }
 
@@ -108,7 +122,11 @@ describe('Plugin Interfaces', () => {
 
             onClientMessage(
                 messageType: string,
-                handler: Function
+                handler: (
+                    clientId: string,
+                    message: unknown,
+                    client: GameClient
+                ) => void
             ): () => void {
                 if (!this.messageHandlers.has(messageType)) {
                     this.messageHandlers.set(messageType, []);
@@ -151,21 +169,23 @@ describe('Plugin Interfaces', () => {
             // Test helpers
             mockAddClient(client: GameClient): void {
                 this.clients.set(client.id, client);
-                this.connectHandlers.forEach((handler) => handler(client));
+                this.connectHandlers.forEach((handler) => {
+                    handler(client);
+                });
             }
 
             mockTriggerMessage(
                 clientId: string,
                 messageType: string,
-                message: any
+                message: unknown
             ): void {
                 const client = this.clients.get(clientId);
                 if (client) {
                     const handlers =
                         this.messageHandlers.get(messageType) ?? [];
-                    handlers.forEach((handler) =>
-                        handler(clientId, message, client)
-                    );
+                    handlers.forEach((handler) => {
+                        handler(clientId, message, client);
+                    });
                 }
             }
         }
@@ -183,7 +203,7 @@ describe('Plugin Interfaces', () => {
 
             const mockClient: GameClient = {
                 id: 'test-client',
-                ws: {} as any,
+                ws: {} as ServerWebSocket<unknown>,
                 lastHeartbeat: Date.now(),
                 isAuthenticated: true,
                 metadata: {},
@@ -218,7 +238,7 @@ describe('Plugin Interfaces', () => {
 
             const mockClient: GameClient = {
                 id: 'test-client',
-                ws: {} as any,
+                ws: {} as ServerWebSocket<unknown>,
                 lastHeartbeat: Date.now(),
                 isAuthenticated: true,
                 metadata: {},
@@ -226,10 +246,12 @@ describe('Plugin Interfaces', () => {
 
             plugin.mockAddClient(mockClient);
 
-            let receivedMessage: any;
+            let receivedMessage:
+                | { clientId: string; message: unknown }
+                | undefined;
             plugin.onClientMessage(
                 'test-message',
-                (clientId: string, message: any) => {
+                (clientId: string, message: unknown) => {
                     receivedMessage = { clientId, message };
                 }
             );
@@ -255,7 +277,7 @@ describe('Plugin Interfaces', () => {
 
             private storage = new Map<
                 string,
-                { data: string; metadata: any }
+                { data: string; metadata: StorageMetadata }
             >();
 
             constructor() {
@@ -271,7 +293,7 @@ describe('Plugin Interfaces', () => {
             async save(
                 key: string,
                 data: unknown,
-                options?: any
+                options?: StorageOptions
             ): Promise<void> {
                 this.validateKey(key);
                 const serialized = this.serialize(data);
@@ -321,7 +343,9 @@ describe('Plugin Interfaces', () => {
                 this.storage.clear();
             }
 
-            async getMetadata(key: string): Promise<any> {
+            async getMetadata(
+                key: string
+            ): Promise<StorageMetadata | undefined> {
                 this.validateKey(key);
                 const item = this.storage.get(key);
                 return item?.metadata;
@@ -338,7 +362,7 @@ describe('Plugin Interfaces', () => {
                 }
             }
 
-            async getStats(): Promise<any> {
+            async getStats(): Promise<StorageStats> {
                 return {
                     itemCount: this.storage.size,
                     totalSize: Array.from(this.storage.values()).reduce(
