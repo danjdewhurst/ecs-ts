@@ -37,7 +37,7 @@ We use GitHub to sync code, track issues, feature requests, and accept pull requ
 4. **Document**: Update documentation if needed
    - Update README.md for user-facing changes
    - Update inline comments for complex logic
-   - Update PLAN.md checkboxes if completing planned features
+   - Add tests for the new functionality
 
 5. **Submit**: Create a pull request with:
    - Clear title and description
@@ -187,27 +187,18 @@ Before major releases:
 
 ## 🎯 Current Priorities
 
-Check our [Implementation Plan](PLAN.md) for current priorities:
-
-### High Priority
-- [ ] Event System Implementation
-- [ ] WebSocket Integration
-- [ ] Performance Benchmarks
-
-### Medium Priority
-- [ ] Plugin Architecture
-- [ ] Advanced Query System
-- [ ] Documentation Improvements
+The core engine is production-ready with all major features complete. Current priorities include:
 
 ### Help Wanted
-- Performance optimizations
-- Additional example games
-- Documentation improvements
+- Performance optimizations and benchmarking
+- Additional example games and use cases
+- Documentation improvements and tutorials
 - Test coverage improvements
+- Community plugins and extensions
 
 ## 📖 Resources
 
-- [Implementation Plan](PLAN.md) - Detailed roadmap and progress
+- [Philosophy](PHILOSOPHY.md) - Core design principles and architecture
 - [Examples](examples/) - Working code examples
 - [Tests](src/**/*.test.ts) - Test suite for reference
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/) - TypeScript reference
