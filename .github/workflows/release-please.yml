@@ -9,6 +9,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
+  id-token: write
 
 jobs:
   release-please:
@@ -91,6 +92,6 @@ jobs:
         if: ${{ !contains(needs.release-please.outputs.tag_name, '-alpha') && !contains(needs.release-please.outputs.tag_name, '-beta') && !contains(needs.release-please.outputs.tag_name, '-rc') }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          npm publish --access public
+          npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
