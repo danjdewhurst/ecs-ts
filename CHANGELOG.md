@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.0...ecs-ts/v0.8.1) (2025-09-21)
+
+
+### 🎨 Maintenance
+
+* added context7.json ([f4ee544](https://github.com/danjdewhurst/ecs-ts/commit/f4ee54494d4de7843d75dd2ce3208403c9bbfdb8))
+
 ## [0.8.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.5...ecs-ts/v0.8.0) (2025-09-21)
 
 
