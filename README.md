@@ -256,7 +256,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## 📄 License
 
-[MIT](LICENSE) © 2024 [danjdewhurst](https://github.com/danjdewhurst)
+[MIT](LICENSE) © 2025 [danjdewhurst](https://github.com/danjdewhurst)
 
 ---
 
