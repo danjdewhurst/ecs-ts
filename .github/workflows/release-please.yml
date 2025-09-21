@@ -87,11 +87,10 @@ jobs:
             --data-binary @"./release-assets/${FILENAME}.tar.gz" \
             "${{ needs.release-please.outputs.upload_url }}?name=${FILENAME}.tar.gz&label=${FILENAME}.tar.gz"
 
-      # Future: NPM publishing when ready
-      # - name: 📦 Publish to NPM
-      #   if: ${{ !contains(needs.release-please.outputs.tag_name, '-') }}
-      #   run: |
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      #     npm publish --access public
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 📦 Publish to NPM
+        if: ${{ !contains(needs.release-please.outputs.tag_name, '-') }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
