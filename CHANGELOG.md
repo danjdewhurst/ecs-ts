@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.2...ecs-ts/v0.7.3) (2025-09-21)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** correct NPM publish condition for tag format ([33f1c19](https://github.com/danjdewhurst/ecs-ts/commit/33f1c19e8a16083722c829728b9b485b31f0d1c1))
+
 ## [0.7.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.1...ecs-ts/v0.7.2) (2025-09-21)
 
 
