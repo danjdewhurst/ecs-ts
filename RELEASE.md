@@ -118,7 +118,7 @@ graph TD
    - Build artifacts are generated and uploaded
 
 5. **Post-Release**
-   - NPM package is published (when ready)
+   - NPM package is published to [@danjdewhurst/ecs-ts](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
    - Release announcement
    - Documentation updates
 
@@ -223,27 +223,46 @@ sha256sum *.tar.gz > checksums.txt
 
 ### Current Status
 
-NPM publishing is **prepared but disabled** while the project is in development.
+NPM publishing is **live and active**! The package is available at [@danjdewhurst/ecs-ts](https://www.npmjs.com/package/@danjdewhurst/ecs-ts).
 
-### When Ready for NPM
+### Installation
 
-To enable NPM publishing:
+```bash
+# Install from npm
+bun add @danjdewhurst/ecs-ts
 
-1. **Set Package Public**
+# Or using npm
+npm install @danjdewhurst/ecs-ts
+
+# Or using yarn
+yarn add @danjdewhurst/ecs-ts
+
+# Or using pnpm
+pnpm add @danjdewhurst/ecs-ts
+```
+
+### Publishing Configuration
+
+The package is configured for automatic publishing:
+
+1. **Package Configuration**
    ```json
    {
      "private": false,
-     "name": "@danjdewhurst/ecs-ts"
+     "name": "@danjdewhurst/ecs-ts",
+     "publishConfig": {
+       "access": "public"
+     }
    }
    ```
 
-2. **Add NPM Token**
-   - Add `NPM_TOKEN` secret to GitHub repository
-   - Configure proper NPM access permissions
+2. **NPM Token**
+   - `NPM_TOKEN` secret configured in GitHub repository
+   - Automated publishing enabled via GitHub Actions
 
-3. **Enable Publishing**
-   - Uncomment NPM publishing steps in `.github/workflows/release-please.yml`
-   - Test with a pre-release version first
+3. **Publishing Workflow**
+   - Automated publishing via Release Please workflow
+   - Triggered on release PR merge
 
 ### Publishing Strategy
 
@@ -341,7 +360,7 @@ Monitor:
 - Download statistics
 - GitHub stars/forks
 - Issue and discussion activity
-- NPM package usage (when published)
+- NPM package usage at [@danjdewhurst/ecs-ts](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
 
 ---
 

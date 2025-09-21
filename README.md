@@ -6,6 +6,8 @@
 
 [![CI](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml)
 [![Release](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml)
+[![npm version](https://img.shields.io/npm/v/@danjdewhurst/ecs-ts.svg)](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
+[![npm downloads](https://img.shields.io/npm/dm/@danjdewhurst/ecs-ts.svg)](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Bun](https://img.shields.io/badge/Bun-000000?style=flat&logo=bun&logoColor=white)](https://bun.sh/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -73,7 +75,23 @@ For the complete philosophy and design principles that guide this project, see [
 ### Installation
 
 ```bash
-# Clone the repository
+# Install from npm
+bun add @danjdewhurst/ecs-ts
+
+# Or using npm
+npm install @danjdewhurst/ecs-ts
+
+# Or using yarn
+yarn add @danjdewhurst/ecs-ts
+
+# Or using pnpm
+pnpm add @danjdewhurst/ecs-ts
+```
+
+### Run Examples (Development)
+
+```bash
+# Clone the repository to run examples
 git clone git@github.com:danjdewhurst/ecs-ts.git
 cd ecs-ts
 
