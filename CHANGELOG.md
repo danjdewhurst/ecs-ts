@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.4](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.3...ecs-ts/v0.7.4) (2025-09-21)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** add NPM provenance and OIDC auth to bypass 2FA requirements ([3fd87c5](https://github.com/danjdewhurst/ecs-ts/commit/3fd87c56e1d7572e7edcd18ebba7d8546f3b2251))
+
 ## [0.7.3](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.2...ecs-ts/v0.7.3) (2025-09-21)
 
 
