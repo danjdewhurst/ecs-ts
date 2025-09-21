@@ -6,6 +6,7 @@
 
 [![CI](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/ci.yml)
 [![Release](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml/badge.svg)](https://github.com/danjdewhurst/ecs-ts/actions/workflows/release-please.yml)
+[![Documentation](https://img.shields.io/badge/Documentation-📚-blue?style=flat)](docs/index.md)
 [![npm version](https://img.shields.io/npm/v/@danjdewhurst/ecs-ts.svg)](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
 [![npm downloads](https://img.shields.io/npm/dm/@danjdewhurst/ecs-ts.svg)](https://www.npmjs.com/package/@danjdewhurst/ecs-ts)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
