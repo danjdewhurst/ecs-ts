@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.1...ecs-ts/v0.8.2) (2025-09-21)
+
+
+### 🐛 Bug Fixes
+
+* resolve linting and type safety issues across codebase ([ca459f6](https://github.com/danjdewhurst/ecs-ts/commit/ca459f6d544f97cbe39c17d612edcfc1a4e1e9ab))
+
+
+### 📚 Documentation
+
+* add comprehensive documentation index and badge ([3717d73](https://github.com/danjdewhurst/ecs-ts/commit/3717d73a916bf3522fd0fe4c6937544146b89192))
+
 ## [0.8.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.0...ecs-ts/v0.8.1) (2025-09-21)
 
 
