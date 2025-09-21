@@ -1,0 +1,15 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "ECS Game Engine",
+  "description": "A high-performance Entity Component System (ECS) game engine built with TypeScript and Bun, featuring archetype-based component storage, type-safe architecture, and modern runtime optimizations for game development.",
+  "branch": "main",
+  "excludeFolders": ["node_modules", "dist", ".github"],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "PHILOSOPHY.md",
+    "RELEASE.md",
+    "LICENSE"
+  ]
+}
