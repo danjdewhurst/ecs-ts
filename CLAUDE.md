@@ -8,17 +8,15 @@ alwaysApply: true
 
 ## Core Philosophy
 
-**All development must adhere to the principles outlined in [PHILOSOPHY.md](PHILOSOPHY.md).**
+**CRITICAL**: All development must adhere to [PHILOSOPHY.md](PHILOSOPHY.md) principles.
 
-Key principles that guide all code contributions:
-- **Entities are IDs, Components are pure data** - No logic in components
-- **All game logic belongs in systems** - System-driven behavior is non-negotiable
-- **Optimize for cache locality and performance** - Data-driven design principles
-- **Single Responsibility Principle** - Each system, component, and entity has one purpose
-- **Developer ergonomics** - APIs must be simple, focused, and avoid boilerplate
-- **Robust tooling culture** - Debugging and profiling are first-class citizens
-
-**Before making any changes, review the complete philosophy document to ensure alignment with project principles.**
+**NON-NEGOTIABLE RULES:**
+- **Entities = IDs only, Components = pure data** (no logic in components)
+- **All game logic in systems** (system-driven behavior required)
+- **Performance first** (cache locality, data-driven design)
+- **Single Responsibility** (one purpose per system/component/entity)
+- **Simple APIs** (avoid boilerplate, focus on ergonomics)
+- **Robust tooling** (debugging/profiling are first-class)
 
 ## Runtime & Tools
 
@@ -29,15 +27,15 @@ Key principles that guide all code contributions:
 - `bun install` for dependency management
 - `bun build` for production builds
 
-**Key Commands:**
-- `bun test` - Run all tests with coverage
-- `bun run typecheck` - TypeScript compilation check
-- `bun run dev` - Development mode with watch
-- `bun examples/basic-example.ts` - Run the basic example
-- `bun examples/event-system-example.ts` - Run the event system example
-- `bun examples/websocket-example.ts` - Run the WebSocket multiplayer example
-- `bun examples/plugin-system-example.ts` - Run the plugin system example
-- `bun examples/performance-optimization-example.ts` - Run the performance optimization example
+**Essential Commands:**
+- `bun test` - Run tests (REQUIRED before commits)
+- `bun run typecheck` - TypeScript check (REQUIRED before commits)
+- `bun run check` - Lint/format check (REQUIRED before commits)
+- `bun run commit` - Interactive conventional commit
+- `bun examples/basic-example.ts` - Basic usage
+- `bun examples/websocket-example.ts` - Multiplayer server
+- `bun examples/plugin-system-example.ts` - Plugin system
+- `bun examples/performance-optimization-example.ts` - Performance
 
 **Release & Publishing Commands:**
 - `bun run commit` - Interactive conventional commit creation (uses commitizen)
@@ -99,11 +97,12 @@ class MySystem extends BaseSystem {
 
 ### Testing Requirements
 
-**All new code must include tests:**
+**MANDATORY: All new code must include tests:**
 - Unit tests for individual classes
 - Integration tests for system interactions
-- Use descriptive test names explaining behavior
-- Follow AAA pattern: Arrange, Act, Assert
+- Descriptive test names explaining behavior
+- AAA pattern: Arrange, Act, Assert
+- Test coverage must be maintained
 
 **Test Structure:**
 ```typescript
@@ -298,17 +297,18 @@ bun run build:clean
 - Beta: `git tag v0.5.0-beta.1`
 - RC: `git tag v0.5.0-rc.1`
 
-## Implementation Phases
+## Implementation Status
 
-Follow the [PLAN.md](PLAN.md) progression:
-- ✅ **Phase 1**: Core ECS Implementation (Complete)
-- ✅ **Phase 2**: System Architecture (Complete)
-- ✅ **Phase 3**: Event System Implementation (Complete)
-- ✅ **Phase 4**: WebSocket Integration with Bun (Complete)
-- ✅ **Phase 5**: Plugin Architecture (Complete)
-- ✅ **Phase 6**: Performance Optimisation (Complete)
+**✅ ALL PHASES COMPLETE - PRODUCTION READY**
 
-**All 6 phases complete - Engine ready for production use**
+- ✅ **Phase 1**: Core ECS Implementation
+- ✅ **Phase 2**: System Architecture
+- ✅ **Phase 3**: Event System Implementation
+- ✅ **Phase 4**: WebSocket Integration with Bun
+- ✅ **Phase 5**: Plugin Architecture
+- ✅ **Phase 6**: Performance Optimization
+
+**Engine is production-ready with full feature set completed.**
 
 ## Claude Release Assistance
 
