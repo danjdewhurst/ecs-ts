@@ -47,7 +47,9 @@ yarn add @danjdewhurst/ecs-ts
 pnpm add @danjdewhurst/ecs-ts
 ```
 
-### Option 2: Clone and Build from Source
+### Option 2: Development Build from Source
+
+For development, contributing, or running examples:
 
 ```bash
 # Clone the repository

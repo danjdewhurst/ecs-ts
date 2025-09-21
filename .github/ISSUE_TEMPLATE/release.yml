@@ -105,7 +105,7 @@ body:
         - label: "Release tag created"
         - label: "GitHub release created"
         - label: "Assets uploaded"
-        - label: "NPM package published (when ready)"
+        - label: "NPM package published to @danjdewhurst/ecs-ts"
         - label: "Release announcement posted"
 
   - type: textarea
