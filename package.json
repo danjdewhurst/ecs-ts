@@ -59,6 +59,7 @@
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
+    "scaffold": "bun src/cli/index.ts",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "build": "bun run build:types && bun build src/index.ts --outdir dist --target node",
@@ -83,6 +84,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@types/bun": "latest",
+    "@types/inquirer": "^9.0.9",
     "commitizen": "^4.3.1",
     "conventional-changelog-cli": "^5.0.0",
     "cz-conventional-changelog": "^3.3.0",

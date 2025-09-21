@@ -33,6 +33,12 @@ Welcome to the comprehensive documentation for the high-performance Entity Compo
 - [Creating Custom Plugins](#creating-custom-plugins)
 - [Plugin Dependencies](#plugin-dependencies)
 
+### 🛠️ CLI Scaffolding
+- [CLI Scaffolding Overview](#cli-scaffolding-overview)
+- [Component Generation](#component-generation)
+- [System Generation](#system-generation)
+- [Example & Template Generation](#example-template-generation)
+
 ### ⚡ Performance
 - [Dirty Component Tracking](#dirty-component-tracking)
 - [Object Pooling](#object-pooling)
@@ -338,6 +344,145 @@ const pluginManager = new PluginManager();
 await pluginManager.loadPlugin(new MyGamePlugin());
 await pluginManager.initializeAll(world);
 ```
+
+## CLI Scaffolding Overview
+
+The ECS Game Engine includes a powerful interactive CLI scaffolding tool for rapid development. Generate type-safe, tested code that follows ECS patterns and automatically integrates with your project structure.
+
+### Quick Start
+
+```bash
+# Launch interactive scaffolding wizard
+bun run scaffold
+
+# OR use direct commands with aliases
+bun run scaffold component    # or: bun run scaffold c
+bun run scaffold system       # or: bun run scaffold s
+bun run scaffold --help       # Show help and all options
+```
+
+### Scaffolding Features
+
+- **Interactive prompts** with validation and smart defaults
+- **Type-safe code generation** following ECS patterns
+- **Automatic test generation** with comprehensive coverage
+- **Index file updates** maintaining clean project structure
+- **Project analysis** to prevent naming conflicts
+- **Template system** for consistent code patterns
+
+## Component Generation
+
+Generate ECS components with custom properties and factory functions:
+
+```bash
+bun run scaffold
+# Select: Component - Generate ECS component with interface and factory
+```
+
+**Features:**
+- Custom property definitions with TypeScript types
+- Built-in support for common types (Vector2, Vector3, arrays)
+- Optional properties with default values
+- Factory function generation
+- Comprehensive test generation
+- Automatic index file updates
+
+**Generated Structure:**
+```typescript
+// Generated component interface
+export interface HealthComponent extends Component {
+    readonly type: 'health';
+    hp: number;
+    maxHp: number;
+}
+
+// Generated factory function
+export function createHealthComponent(hp: number, maxHp: number): HealthComponent {
+    return {
+        type: 'health',
+        hp,
+        maxHp,
+    };
+}
+
+// Generated tests
+describe('HealthComponent', () => {
+    test('should create HealthComponent with correct type', () => {
+        const component = createHealthComponent(100, 100);
+        expect(component.type).toBe('health');
+        expect(component.hp).toBe(100);
+        expect(component.maxHp).toBe(100);
+    });
+});
+```
+
+## System Generation
+
+Generate ECS systems with dependencies, component queries, and lifecycle methods:
+
+```bash
+bun run scaffold
+# Select: System - Generate ECS system extending BaseSystem
+```
+
+**Features:**
+- System priority configuration
+- Dependency management
+- Component query patterns (simple iteration or callback-based)
+- Import generation for referenced components
+- Test generation with entity setup
+- Automatic index file updates
+
+**Generated Structure:**
+```typescript
+// Generated system class
+export class MovementSystem extends BaseSystem {
+    readonly priority = 1;
+    readonly name = 'MovementSystem';
+    readonly dependencies = ['InputSystem'];
+
+    update(world: World, deltaTime: number): void {
+        // Query entities with position, velocity components
+        const entities = this.queryEntities(world, 'position', 'velocity');
+
+        for (const entityId of entities) {
+            const position = world.getComponent<PositionComponent>(entityId, 'position');
+            const velocity = world.getComponent<VelocityComponent>(entityId, 'velocity');
+
+            // System logic here
+        }
+    }
+}
+```
+
+## Example & Template Generation
+
+Generate complete examples or game templates:
+
+```bash
+bun run scaffold
+# Select: Example - Generate complete usage example
+# OR
+# Select: Game Template - Generate complete game setup
+```
+
+**Example Generation:**
+- Demonstrates specific ECS functionality
+- Complete runnable examples
+- Documentation and comments
+- Best practice patterns
+
+**Game Template Generation:**
+- Full game setup with components and systems
+- Integrated examples showing system interactions
+- Plugin architecture demonstrations
+- Performance optimization examples
+
+**Plugin Generation:**
+- Plugin interface implementation
+- Lifecycle management
+- Integration patterns
+- Dependency handling
 
 ## Performance Optimization
 

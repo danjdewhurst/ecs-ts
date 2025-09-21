@@ -9,6 +9,7 @@
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0+-blue?logo=typescript&logoColor=white" alt="TypeScript" /></a>
     <a href="https://bun.sh/"><img src="https://img.shields.io/badge/Runtime-Bun-000?logo=bun&logoColor=white" alt="Bun" /></a>
+    <a href="https://deepwiki.com/danjdewhurst/ecs-ts"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
   </p>
   <p>
     <a href="#-quick-start">Quick Start</a> •
@@ -26,27 +27,32 @@
 <td width="50%">
 
 ### 🚀 Core Performance
+
 - **Archetype-based storage** for O(1) queries
 - **Entity ID recycling** with zero allocations
 - **Cache-friendly** data structures
 - **Dirty tracking** for selective updates
 
 ### 🎯 Developer Experience
+
 - **Full TypeScript** with strict typing
 - **Zero runtime dependencies**
 - **Hot reloading** with Bun
+- **Interactive scaffolding** for rapid development
 - **Comprehensive test coverage**
 
 </td>
 <td width="50%">
 
 ### 🧩 Architecture
+
 - **System dependencies** & scheduling
 - **Event-driven** communication
 - **Plugin system** with hot loading
 - **Object pooling** for memory efficiency
 
 ### 🌐 Multiplayer
+
 - **WebSocket server** built-in
 - **Type-safe** network protocol
 - **Session management**
@@ -79,26 +85,26 @@ npm install @danjdewhurst/ecs-ts
 ## 💻 Basic Usage
 
 ```typescript
-import { World, BaseSystem, type Component } from '@danjdewhurst/ecs-ts';
+import { World, BaseSystem, type Component } from "@danjdewhurst/ecs-ts";
 
 // 1. Define components (pure data)
 interface Position extends Component {
-  readonly type: 'position';
+  readonly type: "position";
   x: number;
   y: number;
 }
 
 // 2. Create systems (game logic)
 class MovementSystem extends BaseSystem {
-  readonly name = 'MovementSystem';
+  readonly name = "MovementSystem";
   readonly priority = 1;
 
   update(world: World, deltaTime: number): void {
-    const entities = this.queryEntities(world, 'position', 'velocity');
+    const entities = this.queryEntities(world, "position", "velocity");
 
     for (const entityId of entities) {
-      const pos = world.getComponent<Position>(entityId, 'position');
-      const vel = world.getComponent<Velocity>(entityId, 'velocity');
+      const pos = world.getComponent<Position>(entityId, "position");
+      const vel = world.getComponent<Velocity>(entityId, "velocity");
 
       if (pos && vel) {
         pos.x += vel.dx * deltaTime;
@@ -113,23 +119,23 @@ const world = new World();
 world.addSystem(new MovementSystem());
 
 const entity = world.createEntity();
-world.addComponent(entity, { type: 'position', x: 0, y: 0 });
-world.addComponent(entity, { type: 'velocity', dx: 10, dy: 5 });
+world.addComponent(entity, { type: "position", x: 0, y: 0 });
+world.addComponent(entity, { type: "velocity", dx: 10, dy: 5 });
 
-world.update(1/60); // Update at 60 FPS
+world.update(1 / 60); // Update at 60 FPS
 ```
 
 ## 📚 Documentation
 
 ### Core Concepts
 
-| Concept | Description | Example |
-|---------|-------------|----------|
-| **World** | Container for all ECS data | `const world = new World()` |
-| **Entity** | Unique ID representing a game object | `world.createEntity()` |
-| **Component** | Pure data attached to entities | `{ type: 'health', hp: 100 }` |
-| **System** | Logic that processes entities | `class MovementSystem extends BaseSystem` |
-| **Query** | Find entities by components | `world.query('position', 'velocity')` |
+| Concept       | Description                          | Example                                   |
+| ------------- | ------------------------------------ | ----------------------------------------- |
+| **World**     | Container for all ECS data           | `const world = new World()`               |
+| **Entity**    | Unique ID representing a game object | `world.createEntity()`                    |
+| **Component** | Pure data attached to entities       | `{ type: 'health', hp: 100 }`             |
+| **System**    | Logic that processes entities        | `class MovementSystem extends BaseSystem` |
+| **Query**     | Find entities by components          | `world.query('position', 'velocity')`     |
 
 ### Advanced Features
 
@@ -138,32 +144,34 @@ world.update(1/60); // Update at 60 FPS
 
 ```typescript
 // Subscribe to events
-world.subscribeToEvent('player-death', (event) => {
+world.subscribeToEvent("player-death", (event) => {
   console.log(`Player ${event.data.playerId} died`);
 });
 
 // Emit events
 world.emitEvent({
-  type: 'player-death',
+  type: "player-death",
   timestamp: Date.now(),
-  data: { playerId: entity }
+  data: { playerId: entity },
 });
 ```
+
 </details>
 
 <details>
 <summary><b>🌐 Multiplayer</b> - WebSocket server built-in</summary>
 
 ```typescript
-import { GameServer } from '@danjdewhurst/ecs-ts/websocket';
+import { GameServer } from "@danjdewhurst/ecs-ts/websocket";
 
 const server = new GameServer(world, {
   port: 3000,
-  maxClients: 100
+  maxClients: 100,
 });
 
 await server.start();
 ```
+
 </details>
 
 <details>
@@ -171,8 +179,8 @@ await server.start();
 
 ```typescript
 class MyPlugin implements Plugin {
-  readonly name = 'MyPlugin';
-  readonly version = '1.0.0';
+  readonly name = "MyPlugin";
+  readonly version = "1.0.0";
 
   async initialize(world: World): Promise<void> {
     // Setup systems, components, etc.
@@ -183,6 +191,35 @@ const pluginManager = new PluginManager();
 await pluginManager.loadPlugin(new MyPlugin());
 await pluginManager.initializeAll(world);
 ```
+
+</details>
+
+<details>
+<summary><b>🛠️ CLI Scaffolding</b> - Interactive code generation</summary>
+
+```bash
+# Launch interactive scaffolding wizard
+bun run scaffold
+
+# OR use direct commands with aliases
+bun run scaffold component    # Generate component (alias: c, comp)
+bun run scaffold system       # Generate system (alias: s, sys)
+bun run scaffold example      # Generate example (alias: e, ex)
+bun run scaffold game         # Generate game template (alias: g)
+bun run scaffold plugin       # Generate plugin (alias: p, plug)
+bun run scaffold --help       # Show all commands and options
+
+# Automatically creates tests and updates index files
+# Follows ECS patterns and project conventions
+```
+
+Generate:
+- **Components** with custom properties and factory functions
+- **Systems** with dependencies and component queries
+- **Examples** demonstrating specific functionality
+- **Game templates** with complete setups
+- **Plugins** following plugin architecture
+
 </details>
 
 <details>
@@ -192,14 +229,16 @@ await pluginManager.initializeAll(world);
 // Object pooling
 const bulletPool = new ObjectPool(
   () => ({ x: 0, y: 0, active: false }),
-  (bullet) => { bullet.active = false; }
+  (bullet) => {
+    bullet.active = false;
+  }
 );
 
 // Dirty tracking for selective updates
-world.dirtyTracker.markDirty(entityId, 'position');
+world.dirtyTracker.markDirty(entityId, "position");
 ```
-</details>
 
+</details>
 
 ## 🧩 Examples
 
@@ -226,6 +265,7 @@ bun test           # Run tests (100% coverage)
 bun run typecheck  # Type checking
 bun run check      # Lint & format
 bun run build      # Build for production
+bun run scaffold   # Interactive code scaffolding
 
 # Commit with conventional commits
 bun run commit     # Interactive commit helper
@@ -240,13 +280,13 @@ bun run commit     # Interactive commit helper
 
 ## 📈 Performance
 
-| Operation | Complexity | Notes |
-|-----------|------------|-------|
-| Entity Creation | O(1) | ID recycling |
-| Component Add/Remove | O(1) | Hash map |
-| Single Query | O(1) | Archetype lookup |
-| Multi Query | O(k) | k = matching entities |
-| System Update | O(n) | n = active entities |
+| Operation            | Complexity | Notes                 |
+| -------------------- | ---------- | --------------------- |
+| Entity Creation      | O(1)       | ID recycling          |
+| Component Add/Remove | O(1)       | Hash map              |
+| Single Query         | O(1)       | Archetype lookup      |
+| Multi Query          | O(k)       | k = matching entities |
+| System Update        | O(n)       | n = active entities   |
 
 ## 🤝 Contributing
 
