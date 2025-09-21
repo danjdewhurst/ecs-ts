@@ -73,10 +73,10 @@ describe('Plugin System Integration', () => {
             world.update(10);
 
             const entity = entities[0];
-            const component = world.getComponent<TestComponent>(
-                entity!,
-                'test'
-            );
+            if (!entity) {
+                throw new Error('Expected entity to exist');
+            }
+            const component = world.getComponent<TestComponent>(entity, 'test');
             expect(component?.value).toBe(10);
         });
     });
