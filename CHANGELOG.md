@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.1...ecs-ts/v0.7.2) (2025-09-21)
+
+
+### 📚 Documentation
+
+* update documentation to reflect npm package publication ([8c43210](https://github.com/danjdewhurst/ecs-ts/commit/8c4321062a102dba431419c3781d609eb0790260))
+
 ## [0.7.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.0...ecs-ts/v0.7.1) (2025-09-21)
 
 
