@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.3...ecs-ts/v0.9.0) (2025-09-21)
+
+
+### ✨ Features
+
+* **core:** add interactive scaffolding tool with help system ([caf6997](https://github.com/danjdewhurst/ecs-ts/commit/caf6997e9ee95182c4d9c7adc1058a8547752e2c))
+
+
+### 🐛 Bug Fixes
+
+* **tests:** ensure deterministic ordering in project analysis ([d2dbaa5](https://github.com/danjdewhurst/ecs-ts/commit/d2dbaa58eaa176b585cf6408da015dc117ce022c))
+
 ## [0.8.3](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.2...ecs-ts/v0.8.3) (2025-09-21)
 
 
