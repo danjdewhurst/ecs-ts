@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.5](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.4...ecs-ts/v0.7.5) (2025-09-21)
+
+
+### 🎨 Maintenance
+
+* remove planning documents and optimize project files ([e363796](https://github.com/danjdewhurst/ecs-ts/commit/e3637966222a83878e9af0d7eb2349892f044126))
+
 ## [0.7.4](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.7.3...ecs-ts/v0.7.4) (2025-09-21)
 
 
