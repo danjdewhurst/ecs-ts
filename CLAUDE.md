@@ -32,6 +32,7 @@ alwaysApply: true
 - `bun run typecheck` - TypeScript check (REQUIRED before commits)
 - `bun run check` - Lint/format check (REQUIRED before commits)
 - `bun run commit` - Interactive conventional commit
+- `bun run scaffold` - Interactive code scaffolding tool
 - `bun examples/basic-example.ts` - Basic usage
 - `bun examples/websocket-example.ts` - Multiplayer server
 - `bun examples/plugin-system-example.ts` - Plugin system
@@ -132,6 +133,34 @@ describe('FeatureName', () => {
 - Cache query results when appropriate
 - Use dirty tracking for selective system updates
 - Leverage object pooling for frequently created/destroyed objects
+
+## CLI Scaffolding Tool ✅
+
+Interactive code generation tool for rapid development:
+- `bun run scaffold` - Interactive scaffolding wizard
+- Type-safe template generation with proper ECS patterns
+- Auto-updates index files and maintains project structure
+- Generates comprehensive tests for all scaffolded code
+
+**Scaffolding Options:**
+- **Components**: Generate ECS components with custom properties and factory functions
+- **Systems**: Generate systems with dependencies, queries, and lifecycle methods
+- **Examples**: Create complete usage examples demonstrating functionality
+- **Game Templates**: Generate full game setups with components and systems
+- **Plugins**: Create plugins following the plugin architecture
+
+```bash
+# Interactive scaffolding
+bun run scaffold
+
+# Direct commands with aliases
+bun run scaffold component    # Generate component (alias: c, comp)
+bun run scaffold system       # Generate system (alias: s, sys)
+bun run scaffold --help       # Show all commands and options
+
+# Generates type-safe, tested code following ECS patterns
+# Automatically updates index files and maintains project structure
+```
 
 ## WebSocket Integration ✅
 
