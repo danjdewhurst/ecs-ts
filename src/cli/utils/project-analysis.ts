@@ -34,21 +34,24 @@ export function analyzeProject(): ProjectStructure {
     if (existsSync(structure.componentsDir)) {
         structure.existingComponents = readdirSync(structure.componentsDir)
             .filter((file) => extname(file) === '.ts' && file !== 'index.ts')
-            .map((file) => file.replace('.ts', ''));
+            .map((file) => file.replace('.ts', ''))
+            .sort();
     }
 
     // Analyze existing systems
     if (existsSync(structure.systemsDir)) {
         structure.existingSystems = readdirSync(structure.systemsDir)
             .filter((file) => extname(file) === '.ts' && file !== 'index.ts')
-            .map((file) => file.replace('.ts', ''));
+            .map((file) => file.replace('.ts', ''))
+            .sort();
     }
 
     // Analyze existing examples
     if (existsSync(structure.examplesDir)) {
         structure.existingExamples = readdirSync(structure.examplesDir)
             .filter((file) => extname(file) === '.ts')
-            .map((file) => file.replace('.ts', ''));
+            .map((file) => file.replace('.ts', ''))
+            .sort();
     }
 
     // Analyze existing plugins
@@ -60,7 +63,8 @@ export function analyzeProject(): ProjectStructure {
                     file !== 'index.ts' &&
                     !file.includes('.test.')
             )
-            .map((file) => file.replace('.ts', ''));
+            .map((file) => file.replace('.ts', ''))
+            .sort();
     }
 
     return structure;

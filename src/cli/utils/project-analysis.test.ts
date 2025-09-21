@@ -127,8 +127,8 @@ describe('analyzeProject', () => {
         const structure = analyzeProject();
 
         expect(structure.existingExamples).toEqual([
-            'basic-example',
             'advanced-example',
+            'basic-example',
         ]);
     });
 
