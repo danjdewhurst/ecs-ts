@@ -156,6 +156,53 @@ world.emitEvent({
 </details>
 
 <details>
+<summary><b>🔗 System Dependencies</b> - Automatic execution ordering</summary>
+
+```typescript
+class PhysicsSystem extends BaseSystem {
+  readonly name = "PhysicsSystem";
+  readonly priority = 1;
+  // No dependencies - runs first
+}
+
+class CollisionSystem extends BaseSystem {
+  readonly name = "CollisionSystem";
+  readonly priority = 10; // Higher priority, but runs AFTER physics
+  readonly dependencies = ["PhysicsSystem"]; // Explicit dependency
+}
+
+class DamageSystem extends BaseSystem {
+  readonly name = "DamageSystem";
+  readonly priority = 1;
+  readonly dependencies = ["CollisionSystem"]; // Runs after collision
+}
+
+// Systems execute in dependency order: Physics → Collision → Damage
+// Regardless of add order or priority
+
+// Validate dependencies before adding
+const validation = world.validateSystemDependencies([
+  new PhysicsSystem(),
+  new CollisionSystem(),
+]);
+
+// Get execution order
+const order = world.getSystemExecutionOrder();
+// [PhysicsSystem, CollisionSystem, DamageSystem]
+
+// View dependency graph
+const graph = world.getSystemDependencyGraph();
+```
+
+**Benefits:**
+- ✅ Prevents logic errors from incorrect system ordering
+- ✅ Self-documenting system relationships
+- ✅ Detects circular dependencies with helpful errors
+- ✅ Foundation for future parallel execution
+
+</details>
+
+<details>
 <summary><b>🌐 Multiplayer</b> - WebSocket server built-in</summary>
 
 ```typescript
@@ -244,11 +291,12 @@ world.dirtyTracker.markDirty(entityId, "position");
 git clone https://github.com/danjdewhurst/ecs-ts.git
 cd ecs-ts && bun install
 
-bun examples/basic-example.ts              # Core ECS
-bun examples/event-system-example.ts       # Events
-bun examples/websocket-example.ts          # Multiplayer
-bun examples/plugin-system-example.ts      # Plugins
-bun examples/performance-optimization.ts   # Optimization
+bun examples/basic-example.ts                  # Core ECS
+bun examples/system-dependencies-example.ts    # System dependencies
+bun examples/event-system-example.ts           # Events
+bun examples/websocket-example.ts              # Multiplayer
+bun examples/plugin-system-example.ts          # Plugins
+bun examples/performance-optimization.ts       # Optimization
 ```
 
 ## 🧩 Development
