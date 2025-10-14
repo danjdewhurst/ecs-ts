@@ -74,14 +74,10 @@ Built on proven ECS patterns for maximum performance and maintainability. [Learn
 ### Installation
 
 ```bash
-# Using Bun (recommended)
 bun add @danjdewhurst/ecs-ts
-
-# Using npm/yarn/pnpm
-npm install @danjdewhurst/ecs-ts
 ```
 
-**Requirements:** Bun v1.1.0+ or Node.js 18+
+**Requirements:** Bun 1.2+
 
 ## 💻 Basic Usage
 
