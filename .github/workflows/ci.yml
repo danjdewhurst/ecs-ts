@@ -41,7 +41,7 @@ jobs:
 
       - name: 📥 Install dependencies
         if: steps.bun-cache.outputs.cache-hit != 'true'
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: 🔍 TypeScript Check
         run: bun run typecheck
@@ -85,7 +85,7 @@ jobs:
 
       - name: 📥 Install dependencies
         if: steps.bun-cache.outputs.cache-hit != 'true'
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: 📝 Run ls-lint
         run: bun run lslint
@@ -116,7 +116,7 @@ jobs:
           key: ${{ runner.os }}-bun-perf-${{ hashFiles('**/bun.lock', '**/package.json') }}
 
       - name: 📥 Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       # Note: This will run when we implement performance benchmarks
       # - name: ⚡ Run performance benchmarks
