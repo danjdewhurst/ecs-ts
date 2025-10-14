@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.9.2...ecs-ts/v0.10.0) (2025-10-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** None - fully backward compatible
+
+### ✨ Features
+
+* **core:** integrate SystemScheduler into World class ([c8b34c4](https://github.com/danjdewhurst/ecs-ts/commit/c8b34c45039e2a58fa1de254af28aee493346722))
+
+
+### ⚡ Performance Improvements
+
+* **core:** enhance SystemScheduler with better errors and caching ([755225f](https://github.com/danjdewhurst/ecs-ts/commit/755225f394017cc3898879d2048b4cbdae36ff54))
+
+
+### 📚 Documentation
+
+* **core:** add SystemScheduler documentation and examples ([cd2c411](https://github.com/danjdewhurst/ecs-ts/commit/cd2c411c03a42f59665645cddcd2211e00e1f199))
+
 ## [0.9.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.9.1...ecs-ts/v0.9.2) (2025-10-14)
 
 
