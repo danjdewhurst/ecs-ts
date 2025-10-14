@@ -1,0 +1,9 @@
+ls:
+  .md: SCREAMING_SNAKE_CASE
+
+ignore:
+  - .git
+  - node_modules
+  - dist
+  - .husky
+  - .github
