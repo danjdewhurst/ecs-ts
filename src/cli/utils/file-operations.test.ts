@@ -13,6 +13,7 @@ import {
     createFiles,
     ensureDirectoryExists,
     type FileToCreate,
+    getProjectRoot,
     validateFileName,
 } from './file-operations.ts';
 
@@ -199,6 +200,65 @@ describe('addToIndexFile', () => {
             'export { Existing } from "./Existing.ts";\n' +
                 'export { Component } from "./Component.ts";\n'
         );
+    });
+});
+
+describe('getProjectRoot', () => {
+    test('should find project root when package.json exists', () => {
+        // Arrange - we're in a real project with package.json at root
+        const originalCwd = process.cwd();
+
+        // Act
+        const projectRoot = getProjectRoot();
+
+        // Assert
+        expect(projectRoot).toBe(originalCwd);
+        expect(existsSync(join(projectRoot, 'package.json'))).toBe(true);
+    });
+
+    test('should traverse up directories to find project root', () => {
+        // Arrange - create a nested directory structure and change into it
+        const originalCwd = process.cwd();
+        const nestedDir = join(TEST_DIR, 'deeply', 'nested', 'directory');
+        mkdirSync(nestedDir, { recursive: true });
+
+        try {
+            // Act - change to nested directory
+            process.chdir(nestedDir);
+            const projectRoot = getProjectRoot();
+
+            // Assert - should still find the original project root
+            expect(projectRoot).toBe(originalCwd);
+            expect(existsSync(join(projectRoot, 'package.json'))).toBe(true);
+        } finally {
+            // Cleanup - restore original directory
+            process.chdir(originalCwd);
+        }
+    });
+
+    test('should throw error when package.json cannot be found', () => {
+        // Arrange - create isolated directory without package.json and change into it
+        const originalCwd = process.cwd();
+        const isolatedDir = join(TEST_DIR, 'isolated');
+        mkdirSync(isolatedDir, { recursive: true });
+
+        try {
+            // Mock process.cwd to return a path where no package.json exists up to root
+            // We'll use a temporary override approach
+            const originalProcessCwd = process.cwd;
+            process.cwd = () => '/tmp/nonexistent/deeply/nested/path';
+
+            // Act & Assert
+            expect(() => getProjectRoot()).toThrow(
+                'Could not find project root (package.json not found)'
+            );
+
+            // Restore process.cwd
+            process.cwd = originalProcessCwd;
+        } finally {
+            // Cleanup - restore original directory
+            process.chdir(originalCwd);
+        }
     });
 });
 
