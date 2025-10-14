@@ -5,6 +5,7 @@ export class SystemScheduler {
     private systems: System[] = [];
     private executionOrder: System[] = [];
     private dependencyGraph = new Map<string, Set<string>>();
+    private executionOrderDirty = true;
 
     addSystem(system: System): void {
         // Check for duplicate system names
@@ -13,6 +14,7 @@ export class SystemScheduler {
         }
 
         this.systems.push(system);
+        this.executionOrderDirty = true;
         this.computeExecutionOrder();
     }
 
@@ -23,6 +25,7 @@ export class SystemScheduler {
         }
 
         this.systems.splice(index, 1);
+        this.executionOrderDirty = true;
         this.computeExecutionOrder();
         return true;
     }
@@ -36,10 +39,14 @@ export class SystemScheduler {
     }
 
     getExecutionOrder(): readonly System[] {
+        // Ensure execution order is computed
+        this.computeExecutionOrder();
         return [...this.executionOrder];
     }
 
     update(world: World, deltaTime: number): void {
+        // Ensure execution order is computed
+        this.computeExecutionOrder();
         for (const system of this.executionOrder) {
             try {
                 system.update(world, deltaTime);
@@ -51,6 +58,8 @@ export class SystemScheduler {
     }
 
     initializeSystems(world: World): void {
+        // Ensure execution order is computed
+        this.computeExecutionOrder();
         for (const system of this.executionOrder) {
             try {
                 system.initialize?.(world);
@@ -64,6 +73,8 @@ export class SystemScheduler {
     }
 
     shutdownSystems(world: World): void {
+        // Ensure execution order is computed
+        this.computeExecutionOrder();
         // Shutdown in reverse order
         for (let i = this.executionOrder.length - 1; i >= 0; i--) {
             const system = this.executionOrder[i];
@@ -80,8 +91,12 @@ export class SystemScheduler {
     }
 
     private computeExecutionOrder(): void {
+        if (!this.executionOrderDirty) {
+            return;
+        }
         this.buildDependencyGraph();
         this.executionOrder = this.topologicalSort();
+        this.executionOrderDirty = false;
     }
 
     private buildDependencyGraph(): void {
@@ -112,18 +127,21 @@ export class SystemScheduler {
         const visited = new Set<string>();
         const visiting = new Set<string>();
         const sorted: System[] = [];
+        const path: string[] = [];
 
         const visit = (systemName: string): void => {
             if (visiting.has(systemName)) {
-                throw new Error(
-                    `Circular dependency detected involving system '${systemName}'`
-                );
+                // Build the cycle path
+                const cycleStart = path.indexOf(systemName);
+                const cycle = [...path.slice(cycleStart), systemName];
+                this.throwCircularDependencyError(cycle);
             }
             if (visited.has(systemName)) {
                 return;
             }
 
             visiting.add(systemName);
+            path.push(systemName);
             const dependencies = this.dependencyGraph.get(systemName);
             if (!dependencies) return;
 
@@ -132,6 +150,7 @@ export class SystemScheduler {
             }
 
             visiting.delete(systemName);
+            path.pop();
             visited.add(systemName);
 
             const system = this.systems.find((s) => s.name === systemName);
@@ -147,6 +166,24 @@ export class SystemScheduler {
         // Sort by priority within dependency constraints
         // Systems with the same dependency level are sorted by priority
         return this.sortByPriorityWithinConstraints(sorted);
+    }
+
+    private throwCircularDependencyError(cycle: string[]): never {
+        const cyclePath = cycle.join(' -> ');
+        const systemDetails = cycle
+            .map((name) => {
+                const sys = this.systems.find((s) => s.name === name);
+                return `  - ${name} (priority: ${sys?.priority ?? '?'}, depends on: [${sys?.dependencies?.join(', ') ?? 'none'}])`;
+            })
+            .join('\n');
+
+        throw new Error(
+            `Circular dependency detected in system execution order:\n` +
+                `  ${cyclePath}\n\n` +
+                `Systems involved:\n` +
+                `${systemDetails}\n\n` +
+                `To fix this, remove one of the dependencies to break the cycle.`
+        );
     }
 
     private sortByPriorityWithinConstraints(systems: System[]): System[] {

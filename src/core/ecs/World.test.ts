@@ -785,6 +785,29 @@ describe('World', () => {
             );
         });
 
+        test('should provide detailed error message for circular dependencies', () => {
+            // Arrange
+            const world = new World();
+            const selfRef = new SelfReferencingSystem();
+
+            // Act & Assert - verify detailed error message
+            try {
+                world.addSystem(selfRef);
+                throw new Error('Should have thrown circular dependency error');
+            } catch (error) {
+                const message = (error as Error).message;
+                // Should include cycle path
+                expect(message).toContain(
+                    'SelfReferencingSystem -> SelfReferencingSystem'
+                );
+                // Should include system details
+                expect(message).toContain('priority:');
+                expect(message).toContain('depends on:');
+                // Should include helpful message
+                expect(message).toContain('To fix this');
+            }
+        });
+
         test('should sort systems by priority within same dependency level', () => {
             // Arrange
             const world = new World();
