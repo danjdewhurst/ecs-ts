@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.9.1...ecs-ts/v0.9.2) (2025-10-14)
+
+
+### 🐛 Bug Fixes
+
+* **docs:** resolve git case-sensitivity issues for file renames ([5e0d172](https://github.com/danjdewhurst/ecs-ts/commit/5e0d172ada188155f00f1d1285003946a5d0554d))
+
+
+### 📚 Documentation
+
+* update requirements to Bun 1.2+ only ([712072e](https://github.com/danjdewhurst/ecs-ts/commit/712072e26f8ee33c9679a59701a63c626b3af92e))
+
+
+### 🔧 CI/CD
+
+* expand Bun version matrix to test against 1.0, 1.1, 1.2, and latest ([80d0db0](https://github.com/danjdewhurst/ecs-ts/commit/80d0db0ea5e18fa8ffc2886dab436387b378058d))
+* remove frozen-lockfile flag for multi-version compatibility ([243f3e5](https://github.com/danjdewhurst/ecs-ts/commit/243f3e5488e1ff10e4c649dfeb186b841424e51c))
+* test against Bun 1.2, 1.3, and latest with frozen lockfile ([6b4be9f](https://github.com/danjdewhurst/ecs-ts/commit/6b4be9f09e6b2e5da73c494976aff455e185287a))
+
+
+### 🎨 Maintenance
+
+* **docs:** standardize file naming and add linting enforcement ([40eb086](https://github.com/danjdewhurst/ecs-ts/commit/40eb0863201341fa7597c553158086be3ee83c7a))
+
 ## [0.9.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.9.0...ecs-ts/v0.9.1) (2025-10-14)
 
 
