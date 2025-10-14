@@ -680,4 +680,431 @@ describe('World', () => {
         expect(world.isEntityDirty(entity)).toBe(true);
         expect(world.isComponentDirty(entity, 'position')).toBe(true);
     });
+
+    // SystemScheduler Integration Tests
+    describe('SystemScheduler Integration', () => {
+        class PhysicsSystem extends BaseSystem {
+            readonly name = 'PhysicsSystem';
+            readonly priority = 1;
+            updateOrder: number[] = [];
+
+            update(_world: World, _deltaTime: number): void {
+                this.updateOrder.push(1);
+            }
+        }
+
+        class CollisionSystem extends BaseSystem {
+            override readonly name = 'CollisionSystem';
+            override readonly priority = 2;
+            override readonly dependencies = ['PhysicsSystem'];
+            updateOrder: number[] = [];
+
+            override update(_world: World, _deltaTime: number): void {
+                this.updateOrder.push(2);
+            }
+        }
+
+        class DamageSystem extends BaseSystem {
+            override readonly name = 'DamageSystem';
+            override readonly priority = 1; // Higher priority but depends on collision
+            override readonly dependencies = ['CollisionSystem'];
+            updateOrder: number[] = [];
+
+            override update(_world: World, _deltaTime: number): void {
+                this.updateOrder.push(3);
+            }
+        }
+
+        class RenderSystem extends BaseSystem {
+            readonly name = 'RenderSystem';
+            readonly priority = 10;
+            updateOrder: number[] = [];
+
+            update(_world: World, _deltaTime: number): void {
+                this.updateOrder.push(4);
+            }
+        }
+
+        class InitializeTestSystem extends BaseSystem {
+            override readonly name = 'InitializeTestSystem';
+            override readonly priority = 1;
+            initialized = false;
+            shutdownCalled = false;
+
+            override initialize(_world: World): void {
+                this.initialized = true;
+            }
+
+            override update(_world: World, _deltaTime: number): void {
+                // No-op
+            }
+
+            override shutdown(_world: World): void {
+                this.shutdownCalled = true;
+            }
+        }
+
+        class SelfReferencingSystem extends BaseSystem {
+            override readonly name = 'SelfReferencingSystem';
+            override readonly priority = 1;
+            override readonly dependencies = ['SelfReferencingSystem'];
+            override update(_world: World, _deltaTime: number): void {
+                // No-op
+            }
+        }
+
+        test('should execute systems in dependency order', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const collision = new CollisionSystem();
+            const damage = new DamageSystem();
+
+            // Act - add in dependency-satisfying order (deps must exist before dependents)
+            world.addSystem(physics);
+            world.addSystem(collision);
+            world.addSystem(damage);
+
+            world.update(16.67);
+
+            // Assert - should execute in dependency order
+            const executionOrder = world.getSystemExecutionOrder();
+            expect(executionOrder[0]?.name).toBe('PhysicsSystem');
+            expect(executionOrder[1]?.name).toBe('CollisionSystem');
+            expect(executionOrder[2]?.name).toBe('DamageSystem');
+        });
+
+        test('should detect circular dependencies (self-referencing system)', () => {
+            // Arrange
+            const world = new World();
+            const selfRef = new SelfReferencingSystem();
+
+            // Act & Assert - self-referencing system creates a circular dependency
+            expect(() => world.addSystem(selfRef)).toThrow(
+                /circular dependency/i
+            );
+        });
+
+        test('should sort systems by priority within same dependency level', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem(); // priority 1, no deps
+            const render = new RenderSystem(); // priority 10, no deps
+
+            // Act - add in reverse priority order
+            world.addSystem(render);
+            world.addSystem(physics);
+
+            world.update(16.67);
+
+            // Assert - same dependency level, sorted by priority
+            const executionOrder = world.getSystemExecutionOrder();
+            expect(executionOrder[0]?.name).toBe('PhysicsSystem');
+            expect(executionOrder[1]?.name).toBe('RenderSystem');
+        });
+
+        test('should initialize systems on first update', () => {
+            // Arrange
+            const world = new World();
+            const system = new InitializeTestSystem();
+            world.addSystem(system);
+
+            expect(system.initialized).toBe(false);
+
+            // Act
+            world.update(0);
+
+            // Assert
+            expect(system.initialized).toBe(true);
+        });
+
+        test('should initialize system immediately if world already running', () => {
+            // Arrange
+            const world = new World();
+            world.update(0); // Start the world
+
+            const system = new InitializeTestSystem();
+
+            // Act
+            world.addSystem(system);
+
+            // Assert - should be initialized immediately
+            expect(system.initialized).toBe(true);
+        });
+
+        test('should call shutdown when removing system', () => {
+            // Arrange
+            const world = new World();
+            const system = new InitializeTestSystem();
+            world.addSystem(system);
+            world.update(0);
+
+            expect(system.shutdownCalled).toBe(false);
+
+            // Act
+            world.removeSystem('InitializeTestSystem');
+
+            // Assert
+            expect(system.shutdownCalled).toBe(true);
+        });
+
+        test('should call shutdown on all systems in reverse order', () => {
+            // Arrange
+            const world = new World();
+
+            class InitializeTestSystem2 extends BaseSystem {
+                override readonly name = 'InitializeTestSystem2';
+                override readonly priority = 1;
+                initialized = false;
+                shutdownCalled = false;
+
+                override initialize(_world: World): void {
+                    this.initialized = true;
+                }
+
+                override update(_world: World, _deltaTime: number): void {
+                    // No-op
+                }
+
+                override shutdown(_world: World): void {
+                    this.shutdownCalled = true;
+                }
+            }
+
+            const system1 = new InitializeTestSystem();
+            const system2 = new InitializeTestSystem2();
+
+            world.addSystem(system1);
+            world.addSystem(system2);
+            world.update(0);
+
+            // Act
+            world.shutdown();
+
+            // Assert
+            expect(system1.shutdownCalled).toBe(true);
+            expect(system2.shutdownCalled).toBe(true);
+        });
+
+        test('should get system by name', () => {
+            // Arrange
+            const world = new World();
+            const system = new PhysicsSystem();
+            world.addSystem(system);
+
+            // Act
+            const retrieved = world.getSystem('PhysicsSystem');
+
+            // Assert
+            expect(retrieved).toBe(system);
+        });
+
+        test('should return undefined for non-existent system', () => {
+            // Arrange
+            const world = new World();
+
+            // Act
+            const retrieved = world.getSystem('NonExistent');
+
+            // Assert
+            expect(retrieved).toBeUndefined();
+        });
+
+        test('should get all systems', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const collision = new CollisionSystem();
+            world.addSystem(physics);
+            world.addSystem(collision);
+
+            // Act
+            const systems = world.getSystems();
+
+            // Assert
+            expect(systems.length).toBe(2);
+            expect(systems).toContain(physics);
+            expect(systems).toContain(collision);
+        });
+
+        test('should get system execution order', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const collision = new CollisionSystem();
+            const damage = new DamageSystem();
+
+            // Add in dependency-satisfying order
+            world.addSystem(physics);
+            world.addSystem(collision);
+            world.addSystem(damage);
+
+            // Act
+            const order = world.getSystemExecutionOrder();
+
+            // Assert
+            expect(order.length).toBe(3);
+            expect(order[0]).toBe(physics);
+            expect(order[1]).toBe(collision);
+            expect(order[2]).toBe(damage);
+        });
+
+        test('should get system dependency graph', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const collision = new CollisionSystem();
+            const damage = new DamageSystem();
+
+            world.addSystem(physics);
+            world.addSystem(collision);
+            world.addSystem(damage);
+
+            // Act
+            const graph = world.getSystemDependencyGraph();
+
+            // Assert
+            expect(graph.systems.length).toBe(3);
+            expect(graph.executionOrder).toEqual([
+                'PhysicsSystem',
+                'CollisionSystem',
+                'DamageSystem',
+            ]);
+
+            const physicsNode = graph.systems.find(
+                (s) => s.name === 'PhysicsSystem'
+            );
+            expect(physicsNode?.dependencies).toEqual([]);
+            expect(physicsNode?.dependents).toEqual(['CollisionSystem']);
+
+            const collisionNode = graph.systems.find(
+                (s) => s.name === 'CollisionSystem'
+            );
+            expect(collisionNode?.dependencies).toEqual(['PhysicsSystem']);
+            expect(collisionNode?.dependents).toEqual(['DamageSystem']);
+        });
+
+        test('should validate system dependencies', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const collision = new CollisionSystem();
+
+            // Act
+            const result = world.validateSystemDependencies([
+                physics,
+                collision,
+            ]);
+
+            // Assert
+            expect(result.valid).toBe(true);
+            expect(result.error).toBeUndefined();
+        });
+
+        test('should detect missing dependencies during validation', () => {
+            // Arrange
+            const world = new World();
+            const collision = new CollisionSystem(); // Depends on PhysicsSystem (not included)
+
+            // Act
+            const result = world.validateSystemDependencies([collision]);
+
+            // Assert
+            expect(result.valid).toBe(false);
+            expect(result.error).toMatch(/depends on .* which does not exist/i);
+        });
+
+        test('should throw error for missing dependency', () => {
+            // Arrange
+            const world = new World();
+            const collision = new CollisionSystem(); // Depends on PhysicsSystem
+
+            // Act & Assert
+            expect(() => world.addSystem(collision)).toThrow(
+                /depends on 'PhysicsSystem' which does not exist/
+            );
+        });
+
+        test('should throw error for duplicate system names', () => {
+            // Arrange
+            const world = new World();
+            const system1 = new PhysicsSystem();
+            const system2 = new PhysicsSystem();
+
+            // Act & Assert
+            world.addSystem(system1);
+            expect(() => world.addSystem(system2)).toThrow(
+                /System with name 'PhysicsSystem' already exists/
+            );
+        });
+
+        test('should handle empty world with no systems', () => {
+            // Arrange
+            const world = new World();
+
+            // Act & Assert
+            expect(() => world.update(0)).not.toThrow();
+            expect(world.getSystems().length).toBe(0);
+            expect(world.getSystemExecutionOrder().length).toBe(0);
+        });
+
+        test('should handle dynamic system addition during gameplay', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            world.addSystem(physics);
+
+            // Start the world
+            world.update(0);
+
+            // Act - add system after world has started
+            const render = new RenderSystem();
+            world.addSystem(render);
+
+            // Assert
+            expect(world.getSystems().length).toBe(2);
+            expect(() => world.update(0)).not.toThrow();
+        });
+
+        test('should handle system removal during gameplay', () => {
+            // Arrange
+            const world = new World();
+            const physics = new PhysicsSystem();
+            const render = new RenderSystem();
+            world.addSystem(physics);
+            world.addSystem(render);
+
+            // Start the world
+            world.update(0);
+
+            // Act - remove system after world has started
+            const removed = world.removeSystem('RenderSystem');
+
+            // Assert
+            expect(removed).toBe(true);
+            expect(world.getSystems().length).toBe(1);
+            expect(() => world.update(0)).not.toThrow();
+        });
+
+        test('should maintain backward compatibility for systems without dependencies', () => {
+            // Arrange
+            const world = new World();
+            const system1 = new TestSystem();
+            const system2 = new HighPrioritySystem();
+            const system3 = new LowPrioritySystem();
+
+            // Act - add systems without dependencies
+            world.addSystem(system3);
+            world.addSystem(system1);
+            world.addSystem(system2);
+
+            world.update(16.67);
+
+            // Assert - should be sorted by priority as before
+            const order = world.getSystemExecutionOrder();
+            expect(order[0]?.name).toBe('HighPrioritySystem'); // priority 0
+            expect(order[1]?.name).toBe('TestSystem'); // priority 1
+            expect(order[2]?.name).toBe('LowPrioritySystem'); // priority 10
+        });
+    });
 });

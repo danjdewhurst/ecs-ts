@@ -9,13 +9,15 @@ import { type Component, ComponentStorage } from './Component.ts';
 import { EntityManager } from './EntityManager.ts';
 import { Query } from './Query.ts';
 import type { System } from './System.ts';
+import { SystemScheduler } from './SystemScheduler.ts';
 
 export class World {
     private entityManager = new EntityManager();
     // biome-ignore lint/suspicious/noExplicitAny: ComponentStorage needs to handle heterogeneous component types
     private componentStorages = new Map<string, ComponentStorage<any>>();
     private archetypeManager = new ArchetypeManager();
-    private systems: System[] = [];
+    private systemScheduler = new SystemScheduler();
+    private systemsInitialized = false;
     private eventBus = new EventBus();
     private dirtyTracker = new DirtyTracker();
 
@@ -101,38 +103,60 @@ export class World {
     }
 
     addSystem(system: System): void {
-        this.systems.push(system);
-        this.systems.sort((a, b) => a.priority - b.priority);
+        this.systemScheduler.addSystem(system);
+
+        // If world is already running, initialize the system immediately
+        if (this.systemsInitialized) {
+            system.initialize?.(this);
+        }
     }
 
     removeSystem(systemName: string): boolean {
-        const index = this.systems.findIndex(
-            (system) => system.name === systemName
-        );
-        if (index !== -1) {
-            this.systems.splice(index, 1);
-            return true;
+        const system = this.systemScheduler.getSystem(systemName);
+        if (system) {
+            system.shutdown?.(this);
         }
-        return false;
+        return this.systemScheduler.removeSystem(systemName);
+    }
+
+    getSystem(systemName: string): System | undefined {
+        return this.systemScheduler.getSystem(systemName);
+    }
+
+    getSystems(): readonly System[] {
+        return this.systemScheduler.getSystems();
+    }
+
+    getSystemExecutionOrder(): readonly System[] {
+        return this.systemScheduler.getExecutionOrder();
     }
 
     update(deltaTime: number): void {
+        // Initialize systems on first update
+        if (!this.systemsInitialized) {
+            this.systemScheduler.initializeSystems(this);
+            this.systemsInitialized = true;
+        }
+
         // First flush any queued events from EventComponents
         this.flushComponentEvents();
 
         // Process queued events before systems update
         this.eventBus.processEvents();
 
-        // Run systems
-        for (const system of this.systems) {
-            system.update(this, deltaTime);
-        }
+        // Run systems in dependency order
+        this.systemScheduler.update(this, deltaTime);
 
         // Process any events generated during system updates
         this.eventBus.processEvents();
 
         // Clear dirty tracking after systems have run
         this.dirtyTracker.clearDirty();
+    }
+
+    shutdown(): void {
+        this.systemScheduler.shutdownSystems(this);
+        this.systemsInitialized = false;
     }
 
     getEntityCount(): number {
@@ -192,6 +216,48 @@ export class World {
         this.dirtyTracker.markDirty(entityId, componentType);
     }
 
+    /**
+     * Get a visual representation of system execution order and dependencies
+     */
+    getSystemDependencyGraph(): SystemDependencyGraph {
+        return {
+            systems: this.getSystems().map((s) => ({
+                name: s.name,
+                priority: s.priority,
+                dependencies: s.dependencies ?? [],
+                dependents: this.getSystemDependents(s.name),
+            })),
+            executionOrder: this.getSystemExecutionOrder().map((s) => s.name),
+        };
+    }
+
+    /**
+     * Validate system dependencies without adding to world
+     */
+    validateSystemDependencies(systems: System[]): ValidationResult {
+        const tempScheduler = new SystemScheduler();
+        try {
+            for (const system of systems) {
+                tempScheduler.addSystem(system);
+            }
+            return { valid: true };
+        } catch (error) {
+            return {
+                valid: false,
+                error: error instanceof Error ? error.message : String(error),
+            };
+        }
+    }
+
+    /**
+     * Get all systems that depend on the given system
+     */
+    private getSystemDependents(systemName: string): string[] {
+        return this.getSystems()
+            .filter((s) => s.dependencies?.includes(systemName))
+            .map((s) => s.name);
+    }
+
     private flushComponentEvents(): void {
         const eventStorage = this.componentStorages.get('event') as
             | ComponentStorage<EventComponent>
@@ -234,4 +300,19 @@ export class World {
         }
         this.archetypeManager.updateEntityArchetype(entityId, componentTypes);
     }
+}
+
+export interface SystemDependencyGraph {
+    systems: Array<{
+        name: string;
+        priority: number;
+        dependencies: string[];
+        dependents: string[];
+    }>;
+    executionOrder: string[];
+}
+
+export interface ValidationResult {
+    valid: boolean;
+    error?: string;
 }
