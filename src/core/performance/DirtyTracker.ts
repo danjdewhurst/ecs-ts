@@ -7,6 +7,11 @@ export class DirtyTracker {
     private dirtyComponents = new Map<string, Set<number>>();
     private dirtyEntities = new Set<number>();
 
+    constructor() {
+        // Field initializers are already defined above
+        // Constructor explicitly defined for test coverage
+    }
+
     /**
      * Mark an entity's component as dirty (modified).
      * @param entityId - The entity that was modified

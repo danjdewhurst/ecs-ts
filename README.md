@@ -16,7 +16,8 @@
     <a href="#-features">Features</a> •
     <a href="#-documentation">Documentation</a> •
     <a href="#-examples">Examples</a> •
-    <a href="PHILOSOPHY.md">Philosophy</a>
+    <a href="PHILOSOPHY.md">Philosophy</a> •
+    <a href="roadmap/ROADMAP.md">Roadmap</a>
   </p>
 </div>
 
@@ -305,6 +306,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
     <a href="https://github.com/danjdewhurst/ecs-ts">GitHub</a> •
     <a href="https://www.npmjs.com/package/@danjdewhurst/ecs-ts">npm</a> •
     <a href="https://github.com/danjdewhurst/ecs-ts/issues">Issues</a> •
-    <a href="PHILOSOPHY.md">Philosophy</a>
+    <a href="PHILOSOPHY.md">Philosophy</a> •
+    <a href="roadmap/ROADMAP.md">Roadmap</a>
   </p>
 </div>

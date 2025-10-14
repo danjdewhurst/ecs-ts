@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 env:
-  BUN_VERSION: "1.2.17"
+  BUN_VERSION: "1.3.0"
 
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        bun-version: ["1.2.17", "latest"]
+        bun-version: ["1.3.0", "latest"]
 
     steps:
       - name: 📦 Checkout code
@@ -34,7 +34,7 @@ jobs:
           path: |
             ~/.bun/install/cache
             node_modules
-          key: ${{ runner.os }}-bun-${{ matrix.bun-version }}-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          key: ${{ runner.os }}-bun-${{ matrix.bun-version }}-${{ hashFiles('**/bun.lock', '**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-bun-${{ matrix.bun-version }}-
             ${{ runner.os }}-bun-
@@ -74,23 +74,24 @@ jobs:
 
       - name: 📂 Cache Bun dependencies
         uses: actions/cache@v4
+        id: bun-cache
         with:
           path: |
             ~/.bun/install/cache
             node_modules
-          key: ${{ runner.os }}-bun-lint-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          key: ${{ runner.os }}-bun-lint-${{ hashFiles('**/bun.lock', '**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-bun-lint-
 
       - name: 📥 Install dependencies
+        if: steps.bun-cache.outputs.cache-hit != 'true'
         run: bun install --frozen-lockfile
 
-      # Note: These will be implemented when we add linting tools
-      # - name: 🔍 Run ESLint
-      #   run: bun run lint
-      #
-      # - name: 🎨 Check Prettier formatting
-      #   run: bun run format:check
+      - name: 📝 Run ls-lint
+        run: bun run lslint
+
+      - name: 🔍 Run Biome check
+        run: bun run check
 
   performance:
     name: Performance Benchmarks
@@ -112,7 +113,7 @@ jobs:
           path: |
             ~/.bun/install/cache
             node_modules
-          key: ${{ runner.os }}-bun-perf-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          key: ${{ runner.os }}-bun-perf-${{ hashFiles('**/bun.lock', '**/package.json') }}
 
       - name: 📥 Install dependencies
         run: bun install --frozen-lockfile

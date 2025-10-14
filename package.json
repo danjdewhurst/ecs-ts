@@ -77,7 +77,8 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "prepack": "bun run build:clean",
     "prepublishOnly": "bun run test && bun run typecheck && bun run build:clean",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lslint": "ls-lint"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
@@ -106,5 +107,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@ls-lint/ls-lint": "^2.3.1"
   }
 }
