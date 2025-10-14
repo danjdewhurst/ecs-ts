@@ -3,6 +3,25 @@ import { EventBus } from './EventBus';
 import type { GameEvent } from './GameEvent';
 
 describe('EventBus', () => {
+    test('should construct EventBus with empty state', () => {
+        // Arrange & Act
+        const eventBus = new EventBus();
+
+        // Assert - verify constructor initializes properly
+        expect(eventBus).toBeInstanceOf(EventBus);
+        expect(eventBus.hasQueuedEvents()).toBe(false);
+        expect(eventBus.getListenerCount('any-event')).toBe(0);
+    });
+
+    test('should create new EventBus instance with empty state', () => {
+        // Arrange & Act
+        const eventBus = new EventBus();
+
+        // Assert
+        expect(eventBus.hasQueuedEvents()).toBe(false);
+        expect(eventBus.getListenerCount('any-event')).toBe(0);
+    });
+
     test('should emit and process events', () => {
         const eventBus = new EventBus();
         const receivedEvents: GameEvent[] = [];
@@ -178,5 +197,206 @@ describe('EventBus', () => {
         expect(eventBus.hasQueuedEvents()).toBe(true);
         eventBus.clearQueue();
         expect(eventBus.hasQueuedEvents()).toBe(false);
+    });
+
+    test('should process events with no listeners without error', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const testEvent: GameEvent = {
+            type: 'no-listener-event',
+            timestamp: Date.now(),
+            data: { value: 123 },
+        };
+
+        // Act
+        eventBus.emit(testEvent);
+        eventBus.processEvents();
+
+        // Assert - should not throw and queue should be empty
+        expect(eventBus.hasQueuedEvents()).toBe(false);
+    });
+
+    test('should handle unsubscribe when event type has been removed', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const listener1 = () => {};
+        const listener2 = () => {};
+
+        const unsubscribe1 = eventBus.subscribe('remove-test', listener1);
+        const unsubscribe2 = eventBus.subscribe('remove-test', listener2);
+
+        // Act - remove first listener
+        unsubscribe1();
+        expect(eventBus.getListenerCount('remove-test')).toBe(1);
+
+        // Remove second listener
+        unsubscribe2();
+        expect(eventBus.getListenerCount('remove-test')).toBe(0);
+
+        // Act - calling unsubscribe again should not throw
+        unsubscribe1();
+        unsubscribe2();
+
+        // Assert - should still be 0
+        expect(eventBus.getListenerCount('remove-test')).toBe(0);
+    });
+
+    test('should handle subscribe with same listener function multiple times', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const sharedListener = () => {};
+
+        // Act - subscribe the same function twice (Set should deduplicate)
+        const unsubscribe1 = eventBus.subscribe(
+            'same-listener',
+            sharedListener
+        );
+        const unsubscribe2 = eventBus.subscribe(
+            'same-listener',
+            sharedListener
+        );
+
+        // Assert - Set should only store one instance
+        expect(eventBus.getListenerCount('same-listener')).toBe(1);
+
+        // Unsubscribe once should remove it
+        unsubscribe1();
+        expect(eventBus.getListenerCount('same-listener')).toBe(0);
+
+        // Second unsubscribe should be safe (no-op)
+        unsubscribe2();
+        expect(eventBus.getListenerCount('same-listener')).toBe(0);
+    });
+
+    test('should handle immediate unsubscribe without emitting events', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const listener = () => {};
+
+        // Act - subscribe and immediately unsubscribe without processing any events
+        const unsubscribe = eventBus.subscribe('immediate-unsub', listener);
+        expect(eventBus.getListenerCount('immediate-unsub')).toBe(1);
+
+        // Unsubscribe right away
+        unsubscribe();
+
+        // Assert
+        expect(eventBus.getListenerCount('immediate-unsub')).toBe(0);
+    });
+
+    test('should handle empty event queue processing', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const receivedEvents: GameEvent[] = [];
+
+        eventBus.subscribe('empty-queue-test', (event) => {
+            receivedEvents.push(event);
+        });
+
+        // Act - process with no events
+        eventBus.processEvents();
+
+        // Assert
+        expect(receivedEvents).toHaveLength(0);
+        expect(eventBus.hasQueuedEvents()).toBe(false);
+    });
+
+    test('should handle multiple different event types', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const typeAEvents: GameEvent[] = [];
+        const typeBEvents: GameEvent[] = [];
+
+        eventBus.subscribe('type-a', (event) => typeAEvents.push(event));
+        eventBus.subscribe('type-b', (event) => typeBEvents.push(event));
+
+        const eventA: GameEvent = {
+            type: 'type-a',
+            timestamp: Date.now(),
+            data: { name: 'A' },
+        };
+        const eventB: GameEvent = {
+            type: 'type-b',
+            timestamp: Date.now(),
+            data: { name: 'B' },
+        };
+
+        // Act
+        eventBus.emit(eventA);
+        eventBus.emit(eventB);
+        eventBus.emit(eventA);
+        eventBus.processEvents();
+
+        // Assert
+        expect(typeAEvents).toHaveLength(2);
+        expect(typeBEvents).toHaveLength(1);
+        expect(typeAEvents[0]).toEqual(eventA);
+        expect(typeBEvents[0]).toEqual(eventB);
+    });
+
+    test('should clear queue without processing events', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const receivedEvents: GameEvent[] = [];
+
+        eventBus.subscribe('clear-test', (event) => {
+            receivedEvents.push(event);
+        });
+
+        const testEvent: GameEvent = {
+            type: 'clear-test',
+            timestamp: Date.now(),
+            data: {},
+        };
+
+        // Act
+        eventBus.emit(testEvent);
+        eventBus.emit(testEvent);
+        expect(eventBus.hasQueuedEvents()).toBe(true);
+
+        eventBus.clearQueue();
+
+        // Process after clearing
+        eventBus.processEvents();
+
+        // Assert
+        expect(receivedEvents).toHaveLength(0);
+        expect(eventBus.hasQueuedEvents()).toBe(false);
+    });
+
+    test('should handle event emitted during event processing', () => {
+        // Arrange
+        const eventBus = new EventBus();
+        const processedEvents: string[] = [];
+
+        eventBus.subscribe('trigger-event', (_event) => {
+            processedEvents.push('first');
+            // Emit another event during processing
+            eventBus.emit({
+                type: 'secondary-event',
+                timestamp: Date.now(),
+                data: {},
+            });
+        });
+
+        eventBus.subscribe('secondary-event', () => {
+            processedEvents.push('second');
+        });
+
+        // Act
+        eventBus.emit({
+            type: 'trigger-event',
+            timestamp: Date.now(),
+            data: {},
+        });
+        eventBus.processEvents();
+
+        // The secondary event should still be queued
+        expect(eventBus.hasQueuedEvents()).toBe(true);
+        expect(processedEvents).toEqual(['first']);
+
+        // Process the secondary event
+        eventBus.processEvents();
+        expect(processedEvents).toEqual(['first', 'second']);
     });
 });

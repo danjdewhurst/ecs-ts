@@ -395,4 +395,37 @@ describe('error handling', () => {
         expect(() => getExistingComponentTypes()).not.toThrow();
         expect(() => getExistingSystemNames()).not.toThrow();
     });
+
+    test('should return empty array when getExistingComponentTypes encounters error', () => {
+        // Arrange: Change to a directory that doesn't exist to trigger error in analyzeProject
+        const _nonExistentDir = join(TEST_PROJECT_DIR, 'non-existent-dir');
+        process.chdir('/');
+
+        // Remove the test project to ensure getProjectRoot will fail
+        if (existsSync(TEST_PROJECT_DIR)) {
+            rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+        }
+
+        // Act
+        const result = getExistingComponentTypes();
+
+        // Assert
+        expect(result).toEqual([]);
+    });
+
+    test('should return empty array when getExistingSystemNames encounters error', () => {
+        // Arrange: Change to a directory that doesn't exist to trigger error in analyzeProject
+        process.chdir('/');
+
+        // Remove the test project to ensure getProjectRoot will fail
+        if (existsSync(TEST_PROJECT_DIR)) {
+            rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+        }
+
+        // Act
+        const result = getExistingSystemNames();
+
+        // Assert
+        expect(result).toEqual([]);
+    });
 });
