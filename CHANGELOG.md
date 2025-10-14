@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.9.0...ecs-ts/v0.9.1) (2025-10-14)
+
+
+### 🧪 Testing
+
+* **core:** add comprehensive test coverage for core modules ([2bab839](https://github.com/danjdewhurst/ecs-ts/commit/2bab8396a37a30246a00f5a494759730548d6b58))
+
 ## [0.9.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.8.3...ecs-ts/v0.9.0) (2025-09-21)
 
 
