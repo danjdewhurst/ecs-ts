@@ -62,3 +62,22 @@ export {
     SERIALIZATION_VERSION,
     WorldSerializer,
 } from './core/serialization/index.ts';
+// Transform Hierarchy exports
+export * from './core/transform/index.ts';
+export {
+    cloneMatrix4x4,
+    cloneQuaternion,
+    cloneVector3,
+    createIdentityMatrix,
+    createQuaternion,
+    createTransformComponent,
+    createVector3,
+    type HierarchyTraversalOptions,
+    type Matrix4x4,
+    type Quaternion,
+    TransformHierarchy,
+    TransformMath,
+    TransformSystem,
+    type TransformSystemConfig,
+    type Vector3,
+} from './core/transform/index.ts';
