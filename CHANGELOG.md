@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.12.0...ecs-ts/v0.13.0) (2025-10-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* Engine is production-ready for general use
+
+### 🎨 Maintenance
+
+* mark engine as production-ready for v1.0.0 ([133419f](https://github.com/danjdewhurst/ecs-ts/commit/133419fd7d80d080ff8b982e95c4b846db74e71c))
+
 ## [0.12.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.11.0...ecs-ts/v0.12.0) (2025-10-18)
 
 
