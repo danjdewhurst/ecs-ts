@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.11.0...ecs-ts/v0.12.0) (2025-10-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** none
+
+### ✨ Features
+
+* **core:** add command buffer system for deferred operations ([f4dd329](https://github.com/danjdewhurst/ecs-ts/commit/f4dd3298b5267fb0264268a201537b661e5d031a))
+* **core:** add comprehensive asset management system ([873ea1f](https://github.com/danjdewhurst/ecs-ts/commit/873ea1f12a58081eb303ac99a99eeb7e18cf8e48))
+* **core:** add comprehensive scene management system ([740a566](https://github.com/danjdewhurst/ecs-ts/commit/740a566148d254957294b88371a55a9f8c39ec01))
+* **core:** add comprehensive transform hierarchy system ([a0a3474](https://github.com/danjdewhurst/ecs-ts/commit/a0a3474ec5c956c1a3c224e7bfef214af4fae55b))
+
+
+### 🐛 Bug Fixes
+
+* **tests:** resolve TypeScript type narrowing issues in World tests ([6d5b865](https://github.com/danjdewhurst/ecs-ts/commit/6d5b865821960633a44822cebc456810be64ec42))
+
 ## [0.11.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.10.1...ecs-ts/v0.11.0) (2025-10-18)
 
 
