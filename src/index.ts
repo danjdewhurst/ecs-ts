@@ -28,7 +28,15 @@ export {
     DirtyTracker,
     ObjectPool,
 } from './core/performance/index.ts';
-
+// Scene Management exports
+export * from './core/scenes/index.ts';
+export {
+    Scene,
+    SceneManager,
+    SceneState,
+    SceneTransition,
+    TransitionPhase,
+} from './core/scenes/index.ts';
 // Serialization exports
 export * from './core/serialization/index.ts';
 export {

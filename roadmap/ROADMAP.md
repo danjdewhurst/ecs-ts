@@ -124,16 +124,28 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 
 **PR:** #60
 
-### 2. Scene Management
+### 2. Scene Management ✅
 **Priority:** Critical
-**Status:** Not Started
+**Status:** ✅ Complete (v0.12.0)
 
-- [ ] Multi-scene support (multiple World instances)
-- [ ] Scene loading/unloading/transitions
-- [ ] Scene hierarchies or nested contexts
-- [ ] Active scene management
-- [ ] Scene preloading
-- [ ] Async scene loading with progress
+**Implementation:**
+- ✅ Multi-scene support (SceneManager manages multiple World instances)
+- ✅ Scene loading/unloading/transitions with lifecycle hooks
+- ✅ Scene state management (unloaded, loading, loaded, active, paused)
+- ✅ Active scene management and tracking
+- ✅ Scene preloading (manual and automatic)
+- ✅ Async scene loading with progress tracking
+- ✅ Scene transitions with customizable fade effects
+- ✅ Persistent scenes (maintain state across unload/load)
+- ✅ Comprehensive tests (47 tests)
+- ✅ Full working example
+
+**Files:**
+- `src/core/scenes/` - Complete scene management module
+- `examples/scene-management-example.ts` - Comprehensive example
+- `tests/scenes.test.ts` - Full test coverage
+
+**PR:** #TBD
 
 **Why:** Required for complex games with multiple levels/menus.
 
@@ -545,7 +557,7 @@ Want to help implement features from this roadmap?
 | Phase | Status | Completion | Target Version |
 |-------|--------|------------|----------------|
 | Phase 1-6 | ✅ Complete | 100% | 0.9.0 |
-| Phase 7 | 🔄 In Progress | 20% (1/5) | 1.0.0 |
+| Phase 7 | 🔄 In Progress | 40% (2/5) | 1.0.0 |
 | Phase 8 | 📋 Planned | 0% | 1.1.0 |
 | Phase 9 | 📋 Planned | 0% | 1.2.0 |
 | Phase 10 | 📋 Planned | 0% | 1.3.0+ |
@@ -554,8 +566,9 @@ Want to help implement features from this roadmap?
 ---
 
 **Last Updated:** 2025-01-18
-**Current Version:** 0.11.0 (dev)
+**Current Version:** 0.12.0 (dev)
 **Next Milestone:** 1.0.0 (Phase 7 - Core Completeness)
 
 **Recent Completions:**
+- ✅ Scene Management (PR #TBD)
 - ✅ Serialization & Persistence (PR #60)
