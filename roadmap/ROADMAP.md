@@ -96,28 +96,33 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 
 ## 🎯 Must-Have for 1.0 Release
 
-### 1. Serialization & Persistence
+### 1. Serialization & Persistence ✅
 **Priority:** Critical
-**Status:** Interface Defined, Core Implementation Needed
+**Status:** ✅ Complete (v0.11.0)
 
-**Current State:**
-- ✅ StoragePlugin interface exists (abstraction for persistence)
-- ✅ Example implementation (SQLitePersistenceSystem in examples/)
-- ✅ Network message serialization exists
-- ❌ No built-in core serialization for game state
-- ❌ No scene save/load system
-- ❌ No snapshot/replay functionality
+**Implementation:**
+- ✅ Built-in World serialization/deserialization
+- ✅ Entity/component snapshot capabilities
+- ✅ JSON format for human-readable saves
+- ✅ Binary format for compact, efficient storage
+- ✅ Versioned serialization format (v1.0.0)
+- ✅ Selective serialization with filters (entity IDs, component types, predicates)
+- ✅ World.save() and World.load() convenience methods
+- ✅ Data integrity verification (CRC32 checksum for binary)
+- ✅ Version compatibility checking
+- ✅ Merge or clear loading strategies
+- ✅ Entity ID remapping support
+- ✅ Comprehensive tests (28 tests)
+- ✅ Full working example
+- ⚠️ Scene-specific serialization (deferred to Scene Management feature)
+- ⚠️ StoragePlugin integration (deferred to future enhancement)
 
-**Needed:**
-- [ ] Built-in World serialization/deserialization
-- [ ] Scene serialization/deserialization
-- [ ] Entity/component snapshot capabilities
-- [ ] JSON/binary format support for game state
-- [ ] Versioned serialization format
-- [ ] Selective serialization (save filters)
-- [ ] Integrate StoragePlugin as first-class feature
+**Files:**
+- `src/core/serialization/` - Complete serialization module
+- `examples/serialization-example.ts` - Comprehensive example
+- `tests/serialization.test.ts` - Full test coverage
 
-**Why:** Essential for save games, level editors, and debugging. Pattern exists but not integrated into core.
+**PR:** #60
 
 ### 2. Scene Management
 **Priority:** Critical
@@ -540,7 +545,7 @@ Want to help implement features from this roadmap?
 | Phase | Status | Completion | Target Version |
 |-------|--------|------------|----------------|
 | Phase 1-6 | ✅ Complete | 100% | 0.9.0 |
-| Phase 7 | 🔄 Planning | 0% | 1.0.0 |
+| Phase 7 | 🔄 In Progress | 20% (1/5) | 1.0.0 |
 | Phase 8 | 📋 Planned | 0% | 1.1.0 |
 | Phase 9 | 📋 Planned | 0% | 1.2.0 |
 | Phase 10 | 📋 Planned | 0% | 1.3.0+ |
@@ -548,6 +553,9 @@ Want to help implement features from this roadmap?
 
 ---
 
-**Last Updated:** 2025-10-18
-**Current Version:** 0.10.0
+**Last Updated:** 2025-01-18
+**Current Version:** 0.11.0 (dev)
 **Next Milestone:** 1.0.0 (Phase 7 - Core Completeness)
+
+**Recent Completions:**
+- ✅ Serialization & Persistence (PR #60)
