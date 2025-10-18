@@ -3,10 +3,6 @@ export class EntityManager {
     private recycledIds: number[] = [];
     private livingEntities = new Set<number>();
 
-    constructor() {
-        // Explicit constructor for proper coverage reporting
-    }
-
     createEntity(): number {
         const id = this.recycledIds.pop() ?? this.nextId++;
         this.livingEntities.add(id);

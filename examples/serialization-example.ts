@@ -167,10 +167,10 @@ async function example1_BasicSerialization() {
     // Create snapshot
     const result = world.createSnapshot();
     console.log(`\n✅ Snapshot created successfully!`);
-    console.log(`   Entities: ${result.snapshot!.stats.entityCount}`);
-    console.log(`   Components: ${result.snapshot!.stats.componentCount}`);
+    console.log(`   Entities: ${result.snapshot?.stats.entityCount}`);
+    console.log(`   Components: ${result.snapshot?.stats.componentCount}`);
     console.log(
-        `   Estimated size: ${(result.snapshot!.stats.estimatedSize / 1024).toFixed(2)} KB`
+        `   Estimated size: ${((result.snapshot?.stats.estimatedSize ?? 0) / 1024).toFixed(2)} KB`
     );
     console.log(`   Duration: ${result.duration.toFixed(2)}ms`);
 
@@ -288,10 +288,10 @@ async function example3_SelectiveSerialization() {
 
     const result1 = world.createSnapshot({ filter: filter1 });
     console.log(
-        `   Components in snapshot: ${result1.snapshot!.stats.componentCount}`
+        `   Components in snapshot: ${result1.snapshot?.stats.componentCount}`
     );
     console.log(
-        `   Component types: ${result1.snapshot!.componentTypes.join(', ')}`
+        `   Component types: ${result1.snapshot?.componentTypes.join(', ')}`
     );
 
     // Filter 2: Only save player entities
@@ -302,7 +302,7 @@ async function example3_SelectiveSerialization() {
 
     const result2 = world.createSnapshot({ filter: filter2 });
     console.log(
-        `   Entities in snapshot: ${result2.snapshot!.stats.entityCount}`
+        `   Entities in snapshot: ${result2.snapshot?.stats.entityCount}`
     );
 
     // Filter 3: Only save position and health
@@ -313,10 +313,10 @@ async function example3_SelectiveSerialization() {
 
     const result3 = world.createSnapshot({ filter: filter3 });
     console.log(
-        `   Component types: ${result3.snapshot!.componentTypes.join(', ')}`
+        `   Component types: ${result3.snapshot?.componentTypes.join(', ')}`
     );
     console.log(
-        `   Total components: ${result3.snapshot!.stats.componentCount}`
+        `   Total components: ${result3.snapshot?.stats.componentCount}`
     );
 
     // Custom predicate: Only entities with health > 75
@@ -333,7 +333,7 @@ async function example3_SelectiveSerialization() {
 
     const result4 = world.createSnapshot({ filter: filter4 });
     console.log(
-        `   Entities in snapshot: ${result4.snapshot!.stats.entityCount}`
+        `   Entities in snapshot: ${result4.snapshot?.stats.entityCount}`
     );
 }
 
