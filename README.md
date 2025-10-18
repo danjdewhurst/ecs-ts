@@ -318,7 +318,7 @@ bun run commit     # Interactive commit helper
 
 ### Test Coverage
 
-- ✅ 14 test suites with comprehensive coverage
+- ✅ 24 test suites with comprehensive coverage
 - ✅ Core ECS, Events, WebSocket, Plugins, Performance
 - ✅ Unit and integration tests
 - ✅ 100% critical path coverage
