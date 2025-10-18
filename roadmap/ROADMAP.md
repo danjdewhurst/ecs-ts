@@ -4,7 +4,7 @@ This document outlines planned features and improvements for the ECS Game Engine
 
 ## Current Status
 
-**Version:** 0.9.0
+**Version:** 0.10.0
 **Status:** Production-ready core engine with all Phase 1-6 features complete
 
 All core ECS functionality, event system, WebSocket multiplayer, plugin architecture, and performance optimizations are implemented and tested.
@@ -49,8 +49,8 @@ The following features exist in the codebase:
 - ✅ Comprehensive test suite
 
 **Advanced System Features:**
-- ✅ SystemScheduler class exists but NOT integrated into World
-- ⚠️ World uses simple priority sorting, not dependency-based scheduling
+- ✅ SystemScheduler with dependency-based scheduling
+- ✅ SystemScheduler fully integrated into World class
 - ✅ Query filtering (predicate-based)
 - ⚠️ Queries are recreated each frame, no persistent caching
 
@@ -79,9 +79,8 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 
 **Partially Implemented (needs completion/integration):**
 1. ⚠️ Serialization (interface exists, core implementation needed)
-2. ⚠️ SystemScheduler (exists but not integrated into World)
-3. ⚠️ Query caching (queries exist but no persistent caching)
-4. ⚠️ Change detection (dirty tracking exists, needs callbacks/queries)
+2. ⚠️ Query caching (queries exist but no persistent caching)
+3. ⚠️ Change detection (dirty tracking exists, needs callbacks/queries)
 
 **Already Implemented (confirmed working):**
 1. ✅ Core ECS with archetype optimization
@@ -91,6 +90,7 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 5. ✅ Object pooling
 6. ✅ Dirty tracking
 7. ✅ CLI scaffolding
+8. ✅ SystemScheduler with dependency-based scheduling (integrated into World)
 
 ---
 
@@ -418,18 +418,18 @@ These features may be implemented as separate packages or examples.
 
 ### 23. Multi-threading & Parallelism
 **Priority:** High
-**Status:** Designed But Not Implemented
+**Status:** Partially Complete
 
 **Current State:**
-- ✅ SystemScheduler exists with dependency graph
-- ⚠️ SystemScheduler NOT integrated into World class
-- ✅ World uses simple priority-based sorting
+- ✅ SystemScheduler with dependency graph
+- ✅ SystemScheduler integrated into World class
+- ✅ Dependency-based system scheduling
+- ✅ Enhanced error handling and caching
 - ❌ No parallel system execution
 - ❌ No read/write conflict detection
 - ❌ No job system
 
 **Needed:**
-- [ ] Integrate SystemScheduler into World class
 - [ ] Parallel system execution implementation
 - [ ] Job system for task distribution
 - [ ] Read/write conflict detection based on component access
@@ -437,7 +437,7 @@ These features may be implemented as separate packages or examples.
 - [ ] Worker thread pool management
 - [ ] System parallelism annotations
 
-**Why:** SystemScheduler exists but isn't used. Integrating it would enable safe parallel execution and leverage multi-core CPUs.
+**Why:** SystemScheduler foundation is complete. Next step is to add parallel execution capabilities to leverage multi-core CPUs.
 
 ### 24. Memory Management
 **Priority:** Medium
@@ -548,6 +548,6 @@ Want to help implement features from this roadmap?
 
 ---
 
-**Last Updated:** 2025-10-14
-**Current Version:** 0.9.0
+**Last Updated:** 2025-10-18
+**Current Version:** 0.10.0
 **Next Milestone:** 1.0.0 (Phase 7 - Core Completeness)

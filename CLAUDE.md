@@ -89,12 +89,23 @@ class MySystem extends BaseSystem {
     readonly priority = 1;
     readonly name = 'MySystem';
     readonly dependencies = ['OtherSystem'];
-    
+
     update(world: World, deltaTime: number): void {
         // Implementation
     }
 }
 ```
+
+### File Naming Conventions
+
+**Enforced by ls-lint:**
+- **Markdown files (.md)**: Must use SCREAMING_SNAKE_CASE
+  - ✅ `README.md`, `CHANGELOG.md`, `PHILOSOPHY.md`, `CLAUDE.md`
+  - ❌ `readme.md`, `Changelog.md`, `philosophy.md`
+- Validated automatically as part of `bun run check`
+
+**Ignored directories:**
+- `.git`, `node_modules`, `dist`, `.husky`, `.github`
 
 ### Testing Requirements
 
@@ -329,6 +340,8 @@ bun run build:clean
 ## Implementation Status
 
 **✅ ALL PHASES COMPLETE - PRODUCTION READY**
+
+**Current Version:** 0.10.0
 
 - ✅ **Phase 1**: Core ECS Implementation
 - ✅ **Phase 2**: System Architecture
