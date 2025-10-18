@@ -28,3 +28,14 @@ export {
     DirtyTracker,
     ObjectPool,
 } from './core/performance/index.ts';
+
+// Serialization exports
+export * from './core/serialization/index.ts';
+export {
+    BinaryFormat,
+    createEmptySnapshot,
+    isVersionCompatible,
+    JSONFormat,
+    SERIALIZATION_VERSION,
+    WorldSerializer,
+} from './core/serialization/index.ts';
