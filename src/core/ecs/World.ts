@@ -1,4 +1,9 @@
 import {
+    CommandBuffer,
+    type CommandBufferOptions,
+    type CommandBufferStats,
+} from '../commands/index.ts';
+import {
     EventBus,
     type EventComponent,
     type GameEvent,
@@ -29,6 +34,8 @@ export class World {
     private eventBus = new EventBus();
     private dirtyTracker = new DirtyTracker();
     private worldSerializer = new WorldSerializer();
+    private commandBuffer = new CommandBuffer();
+    private autoExecuteCommands = true;
 
     createEntity(): number {
         return this.entityManager.createEntity();
@@ -156,7 +163,12 @@ export class World {
         // Run systems in dependency order
         this.systemScheduler.update(this, deltaTime);
 
-        // Process any events generated during system updates
+        // Execute queued commands after systems (safe point for structural changes)
+        if (this.autoExecuteCommands && this.commandBuffer.hasCommands()) {
+            this.commandBuffer.execute(this);
+        }
+
+        // Process any events generated during system updates or command execution
         this.eventBus.processEvents();
 
         // Clear dirty tracking after systems have run
@@ -223,6 +235,53 @@ export class World {
 
     markComponentDirty(entityId: number, componentType: string): void {
         this.dirtyTracker.markDirty(entityId, componentType);
+    }
+
+    // Command buffer methods for deferred operations
+
+    /**
+     * Get the main command buffer for this world.
+     * Commands queued here will be executed automatically during the update cycle.
+     */
+    getCommandBuffer(): CommandBuffer {
+        return this.commandBuffer;
+    }
+
+    /**
+     * Create a new independent command buffer.
+     * This buffer must be executed manually and is not automatically executed during updates.
+     *
+     * @param options - Options for the command buffer
+     * @returns A new command buffer instance
+     */
+    createCommandBuffer(options?: CommandBufferOptions): CommandBuffer {
+        return new CommandBuffer(options);
+    }
+
+    /**
+     * Manually execute all queued commands in the main command buffer.
+     *
+     * @returns Statistics about command execution
+     */
+    executeCommands(): CommandBufferStats {
+        return this.commandBuffer.execute(this);
+    }
+
+    /**
+     * Enable or disable automatic command execution during the update cycle.
+     * When enabled (default), commands are executed after systems but before events.
+     *
+     * @param enabled - Whether to auto-execute commands
+     */
+    setAutoExecuteCommands(enabled: boolean): void {
+        this.autoExecuteCommands = enabled;
+    }
+
+    /**
+     * Check if automatic command execution is enabled
+     */
+    isAutoExecuteCommandsEnabled(): boolean {
+        return this.autoExecuteCommands;
     }
 
     /**

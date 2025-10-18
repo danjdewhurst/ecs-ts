@@ -4,10 +4,10 @@ This document outlines planned features and improvements for the ECS Game Engine
 
 ## Current Status
 
-**Version:** 0.14.0 (dev)
-**Status:** Production-ready core engine with all Phase 1-6 features complete, Phase 7 at 80%
+**Version:** 0.15.0 (dev)
+**Status:** Production-ready core engine with all Phase 1-7 features complete, ready for 1.0.0 release
 
-All core ECS functionality, event system, WebSocket multiplayer, plugin architecture, performance optimizations, serialization, scene management, asset management, and transform hierarchy are implemented and tested.
+All core ECS functionality, event system, WebSocket multiplayer, plugin architecture, performance optimizations, serialization, scene management, asset management, transform hierarchy, and command buffers are implemented and tested.
 
 ### What's Already Implemented
 
@@ -92,6 +92,7 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 10. ✅ Scene Management (multi-scene, transitions, preloading)
 11. ✅ Asset Management (loading, hot-reload, reference counting)
 12. ✅ Transform Hierarchy (parent-child, world/local space, scene graphs)
+13. ✅ Command Buffers (deferred operations, undo/replay, safe structural changes)
 
 ---
 
@@ -205,15 +206,28 @@ After thorough codebase analysis, here's what's **genuinely missing**:
 
 **Why:** Fundamental for any spatial game structure.
 
-### 5. Command Buffers
+### 5. Command Buffers ✅
 **Priority:** Critical
-**Status:** Not Started
+**Status:** ✅ Complete (v0.15.0)
 
-- [ ] Deferred entity/component operations
-- [ ] Safe structural changes during system execution
-- [ ] Multi-threaded entity modification support
-- [ ] Command replay/undo capabilities
-- [ ] Batch operation optimization
+**Implementation:**
+- ✅ Deferred entity/component operations
+- ✅ Safe structural changes during system execution
+- ✅ Multi-threaded entity modification support (thread-safe command queueing)
+- ✅ Command replay/undo capabilities
+- ✅ Batch operation optimization
+- ✅ Integration with World update cycle (automatic execution)
+- ✅ Multiple independent command buffers
+- ✅ Command execution statistics and error tracking
+- ✅ Comprehensive tests (37 tests)
+- ✅ Full working example
+
+**Files:**
+- `src/core/commands/` - Complete command buffer module
+- `examples/command-buffers-example.ts` - Comprehensive example
+- `tests/commands.test.ts` - Full test coverage
+
+**PR:** #TBD
 
 **Why:** Required for safe concurrent system execution and avoiding iterator invalidation.
 
@@ -586,7 +600,7 @@ Want to help implement features from this roadmap?
 | Phase | Status | Completion | Target Version |
 |-------|--------|------------|----------------|
 | Phase 1-6 | ✅ Complete | 100% | 0.9.0 |
-| Phase 7 | 🔄 In Progress | 80% (4/5) | 1.0.0 |
+| Phase 7 | ✅ Complete | 100% (5/5) | 1.0.0 |
 | Phase 8 | 📋 Planned | 0% | 1.1.0 |
 | Phase 9 | 📋 Planned | 0% | 1.2.0 |
 | Phase 10 | 📋 Planned | 0% | 1.3.0+ |
@@ -595,10 +609,11 @@ Want to help implement features from this roadmap?
 ---
 
 **Last Updated:** 2025-10-18
-**Current Version:** 0.14.0 (dev)
-**Next Milestone:** 1.0.0 (Phase 7 - Core Completeness)
+**Current Version:** 0.15.0 (dev)
+**Next Milestone:** 1.0.0 (Phase 7 Complete - Ready for Release!)
 
 **Recent Completions:**
+- ✅ Command Buffers (PR #TBD) - Phase 7 Complete! 🎉
 - ✅ Transform Hierarchy (PR #TBD)
 - ✅ Asset Management (PR #TBD)
 - ✅ Scene Management (PR #TBD)

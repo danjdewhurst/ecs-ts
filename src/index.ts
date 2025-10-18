@@ -15,6 +15,15 @@ export {
     ScopedAssetReference,
     TextLoader,
 } from './core/assets/index.ts';
+// Command Buffer exports
+export * from './core/commands/index.ts';
+export {
+    AddComponentCommand,
+    CommandBuffer,
+    CreateEntityCommand,
+    DestroyEntityCommand,
+    RemoveComponentCommand,
+} from './core/commands/index.ts';
 export * from './core/ecs/ArchetypeManager.ts';
 export { ArchetypeManager } from './core/ecs/ArchetypeManager.ts';
 export * from './core/ecs/Component.ts';
