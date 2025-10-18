@@ -4,6 +4,14 @@ import {
     type GameEvent,
 } from '../events/index.ts';
 import { DirtyTracker } from '../performance/index.ts';
+import {
+    type DeserializationOptions,
+    type DeserializationResult,
+    type SerializationOptions,
+    type SerializationResult,
+    WorldSerializer,
+    type WorldSnapshot,
+} from '../serialization/index.ts';
 import { ArchetypeManager } from './ArchetypeManager.ts';
 import { type Component, ComponentStorage } from './Component.ts';
 import { EntityManager } from './EntityManager.ts';
@@ -20,6 +28,7 @@ export class World {
     private systemsInitialized = false;
     private eventBus = new EventBus();
     private dirtyTracker = new DirtyTracker();
+    private worldSerializer = new WorldSerializer();
 
     createEntity(): number {
         return this.entityManager.createEntity();
@@ -256,6 +265,171 @@ export class World {
         return this.getSystems()
             .filter((s) => s.dependencies?.includes(systemName))
             .map((s) => s.name);
+    }
+
+    // Serialization methods
+
+    /**
+     * Create a snapshot of the current world state.
+     * The snapshot can be serialized to disk or network.
+     *
+     * @param options - Serialization options including filters
+     * @returns Serialization result with snapshot data
+     *
+     * @example
+     * ```typescript
+     * const result = world.createSnapshot({
+     *   filter: {
+     *     excludeComponentTypes: ['debug', 'temporary']
+     *   },
+     *   metadata: { saveGame: 'slot1', playerLevel: 42 }
+     * });
+     *
+     * if (result.success && result.snapshot) {
+     *   // Serialize and save the snapshot
+     *   const format = new JSONFormat();
+     *   const data = format.serialize(result.snapshot);
+     *   await Bun.write('save.json', data);
+     * }
+     * ```
+     */
+    createSnapshot(options?: SerializationOptions): SerializationResult {
+        return this.worldSerializer.createSnapshot(this, options);
+    }
+
+    /**
+     * Load a snapshot into this world.
+     * Can clear existing state or merge with current state.
+     *
+     * @param snapshot - The snapshot to load
+     * @param options - Deserialization options
+     * @returns Deserialization result with statistics
+     *
+     * @example
+     * ```typescript
+     * // Load from file
+     * const data = await Bun.file('save.json').arrayBuffer();
+     * const format = new JSONFormat();
+     * const snapshot = format.deserialize(new Uint8Array(data));
+     *
+     * // Load into world
+     * const result = world.loadSnapshot(snapshot, {
+     *   clearExisting: true,
+     *   validateVersion: true
+     * });
+     *
+     * console.log(`Loaded ${result.entitiesLoaded} entities`);
+     * ```
+     */
+    loadSnapshot(
+        snapshot: WorldSnapshot,
+        options?: DeserializationOptions
+    ): DeserializationResult {
+        return this.worldSerializer.loadSnapshot(this, snapshot, options);
+    }
+
+    /**
+     * Save the world state to a file using the specified format.
+     * Convenience method that combines snapshot creation and serialization.
+     *
+     * @param filepath - Path to save the file
+     * @param format - Serialization format to use
+     * @param options - Serialization options
+     * @returns Promise that resolves to serialization result
+     *
+     * @example
+     * ```typescript
+     * import { JSONFormat } from '../serialization';
+     *
+     * const result = await world.save('game.json', new JSONFormat(), {
+     *   prettyPrint: true
+     * });
+     *
+     * if (result.success) {
+     *   console.log('Game saved successfully');
+     * }
+     * ```
+     */
+    async save(
+        filepath: string,
+        format: import('../serialization/types.ts').SerializationFormat,
+        options?: SerializationOptions
+    ): Promise<SerializationResult> {
+        const result = this.createSnapshot(options);
+
+        if (result.success && result.snapshot) {
+            try {
+                const data = format.serialize(result.snapshot, options);
+                await Bun.write(filepath, data);
+            } catch (error) {
+                return {
+                    success: false,
+                    error: `Failed to write file: ${error instanceof Error ? error.message : String(error)}`,
+                    warnings: result.warnings,
+                    duration: result.duration,
+                };
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Load the world state from a file using the specified format.
+     * Convenience method that combines deserialization and snapshot loading.
+     *
+     * @param filepath - Path to load the file from
+     * @param format - Serialization format to use
+     * @param options - Deserialization options
+     * @returns Promise that resolves to deserialization result
+     *
+     * @example
+     * ```typescript
+     * import { JSONFormat } from '../serialization';
+     *
+     * const result = await world.load('game.json', new JSONFormat(), {
+     *   clearExisting: true
+     * });
+     *
+     * if (result.success) {
+     *   console.log(`Loaded ${result.entitiesLoaded} entities`);
+     * }
+     * ```
+     */
+    async load(
+        filepath: string,
+        format: import('../serialization/types.ts').SerializationFormat,
+        options?: DeserializationOptions
+    ): Promise<DeserializationResult> {
+        try {
+            const file = Bun.file(filepath);
+            if (!(await file.exists())) {
+                return {
+                    success: false,
+                    entitiesLoaded: 0,
+                    componentsLoaded: 0,
+                    entityIdMappings: new Map(),
+                    error: `File not found: ${filepath}`,
+                    warnings: [],
+                    duration: 0,
+                };
+            }
+
+            const data = await file.arrayBuffer();
+            const snapshot = format.deserialize(new Uint8Array(data), options);
+
+            return this.loadSnapshot(snapshot, options);
+        } catch (error) {
+            return {
+                success: false,
+                entitiesLoaded: 0,
+                componentsLoaded: 0,
+                entityIdMappings: new Map(),
+                error: `Failed to load file: ${error instanceof Error ? error.message : String(error)}`,
+                warnings: [],
+                duration: 0,
+            };
+        }
     }
 
     private flushComponentEvents(): void {
