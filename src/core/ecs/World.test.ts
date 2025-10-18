@@ -335,8 +335,8 @@ describe('World', () => {
 
         // Assert
         expect(receivedEvent).not.toBeNull();
-        expect(receivedEvent!.type).toBe('test-event');
-        expect(receivedEvent!.data).toEqual({ message: 'hello' });
+        expect(receivedEvent?.type).toBe('test-event');
+        expect(receivedEvent?.data).toEqual({ message: 'hello' });
 
         // Cleanup
         unsubscribe();
@@ -504,9 +504,9 @@ describe('World', () => {
 
         // Assert
         expect(receivedEvent).not.toBeNull();
-        expect(receivedEvent!.type).toBe('custom-event');
-        expect(receivedEvent!.data).toEqual({ value: 42 });
-        expect(receivedEvent!.source).toBe(`entity:${entity}`);
+        expect(receivedEvent?.type).toBe('custom-event');
+        expect(receivedEvent?.data).toEqual({ value: 42 });
+        expect(receivedEvent?.source).toBe(`entity:${entity}`);
     });
 
     test('should handle world update with no event components', () => {
