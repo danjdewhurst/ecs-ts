@@ -1,1 +1,1 @@
-bun run typecheck && bun test && bunx lint-staged
+bun run lslint && bun run typecheck && bun test && bunx lint-staged
