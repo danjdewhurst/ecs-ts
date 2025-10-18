@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.10.1...ecs-ts/v0.11.0) (2025-10-18)
+
+
+### ✨ Features
+
+* **core:** add comprehensive serialization system ([5c12c5e](https://github.com/danjdewhurst/ecs-ts/commit/5c12c5e375dc469885e145fda66833fcbeeae37e)), closes [#1](https://github.com/danjdewhurst/ecs-ts/issues/1)
+
+
+### 📚 Documentation
+
+* **core:** mark serialization & persistence as complete ([0bc052c](https://github.com/danjdewhurst/ecs-ts/commit/0bc052c070394de85f413ae47887404509404c28))
+
+
+### 🎨 Maintenance
+
+* amend pre commit hook ([e4dd39f](https://github.com/danjdewhurst/ecs-ts/commit/e4dd39fde067e4a2b56e8db3c1dc9e1c911e7554))
+
 ## [0.10.1](https://github.com/danjdewhurst/ecs-ts/compare/ecs-ts/v0.10.0...ecs-ts/v0.10.1) (2025-10-18)
 
 
