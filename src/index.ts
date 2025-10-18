@@ -1,5 +1,20 @@
 // Core ECS exports
 
+// Asset Management exports
+export * from './core/assets/index.ts';
+export {
+    Asset,
+    AssetError,
+    AssetErrorCode,
+    AssetManager,
+    AssetReference,
+    AssetState,
+    BaseAssetLoader,
+    BinaryLoader,
+    JSONLoader,
+    ScopedAssetReference,
+    TextLoader,
+} from './core/assets/index.ts';
 export * from './core/ecs/ArchetypeManager.ts';
 export { ArchetypeManager } from './core/ecs/ArchetypeManager.ts';
 export * from './core/ecs/Component.ts';

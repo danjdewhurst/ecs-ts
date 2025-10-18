@@ -252,7 +252,9 @@ export class WorldSerializer {
         // Predicate filter
         if (filter.entityPredicate) {
             filtered = new Set(
-                Array.from(filtered).filter((id) => filter.entityPredicate!(id))
+                Array.from(filtered).filter((id) =>
+                    filter.entityPredicate?.(id)
+                )
             );
         }
 
@@ -280,10 +282,7 @@ export class WorldSerializer {
         }
 
         // Exclude component types filter
-        if (
-            filter.excludeComponentTypes &&
-            filter.excludeComponentTypes.includes(componentType)
-        ) {
+        if (filter.excludeComponentTypes?.includes(componentType)) {
             return false;
         }
 

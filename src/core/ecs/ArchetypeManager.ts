@@ -2,10 +2,6 @@ export class ArchetypeManager {
     private archetypes = new Map<string, Set<number>>();
     private entityArchetypes = new Map<number, string>();
 
-    constructor() {
-        // Explicit constructor for proper coverage reporting
-    }
-
     updateEntityArchetype(entityId: number, componentTypes: string[]): void {
         const oldArchetype = this.entityArchetypes.get(entityId);
         if (oldArchetype) {
